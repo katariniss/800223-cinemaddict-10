@@ -1,7 +1,7 @@
 # Личный проект «Киноман» [![Build status][travis-image]][travis-url]
 
 * Студент: [Екатерина Чекина](https://up.htmlacademy.ru/ecmascript/10/user/800223).
-* Наставник: `Неизвестно`.
+* Наставник: [Сева Либеров](https://htmlacademy.ru/profile/id1229469).
 
 ---
 
