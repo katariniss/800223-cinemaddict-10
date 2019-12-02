@@ -48,9 +48,10 @@ function renderGeneralCards() {
 }
 
 function renderTopRatedCards() {
+  const topRatedCards = generalCards.sort((a, b) => (a.rating < b.rating) ? 1 : -1);
   const topRatedCardsElement = filmsElement.querySelector(`.films-list--top-rated`);
 
-  renderCards(topRatedCardsElement, extraCards);
+  renderCards(topRatedCardsElement, topRatedCards.slice(0, 2));
 }
 
 function renderMostCommentedCards() {
