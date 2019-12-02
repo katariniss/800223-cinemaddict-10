@@ -7,16 +7,14 @@ import {createShowMoreButtonTemplate} from './components/show-more.js';
 import {createSortingTemplate} from './components/sorting.js';
 import {createUserTitleTemplate} from './components/user-title.js';
 
-import {generateCard} from './mocks/card.js';
+import {generateCard, generateCards} from './mocks/card.js';
 import {generateFilmPopup} from './mocks/film-popup';
 
-const FILM_CARD_COUNT_IN_CARDLIST = 5;
+const FILM_CARD_COUNT_IN_CARDLIST = 10;
 const FILM_CARD_COUNT_IN_EXTRA = 2;
 
-const siteHeaderElement = document.querySelector(`.header`);
-
-render(siteHeaderElement, createSearchTemplate(), `beforeend`);
-render(siteHeaderElement, createUserTitleTemplate(), `beforeend`);
+const generalCards = generateCards(FILM_CARD_COUNT_IN_CARDLIST);
+const extraCards = generateCards(FILM_CARD_COUNT_IN_EXTRA);
 
 const siteMainElement = document.querySelector(`.main`);
 
@@ -25,32 +23,43 @@ render(siteMainElement, createSortingTemplate(), `beforeend`);
 render(siteMainElement, createFilmsListTemplate(), `beforeend`);
 
 const filmsElement = siteMainElement.querySelector(`.films`);
+const filmsGeneralListElement = filmsElement.querySelector(`.films-list`);
+
+renderHeader();
+
+renderGeneralCards();
 
 renderExtraCards();
+
+render(filmsGeneralListElement, createShowMoreButtonTemplate(), `beforeend`);
+// render(siteMainElement, createFilmPopupTemplate(generateFilmPopup()), `beforeend`);
+
+function renderHeader() {
+  const siteHeaderElement = document.querySelector(`.header`);
+
+  render(siteHeaderElement, createSearchTemplate(), `beforeend`);
+  render(siteHeaderElement, createUserTitleTemplate(), `beforeend`);
+}
+
+function renderGeneralCards() {
+  renderCards(filmsGeneralListElement, generalCards);
+}
 
 function renderExtraCards() {
   const filmsListExtraElements = filmsElement.querySelectorAll(`.films-list--extra`);
 
   filmsListExtraElements.forEach((filmsListExtraElement) => {
-    renderGeneralCards(filmsListExtraElement, FILM_CARD_COUNT_IN_EXTRA);
+    renderCards(filmsListExtraElement, extraCards);
   });
 }
 
-const filmsGeneralListElement = filmsElement.querySelector(`.films-list`);
-
-renderGeneralCards(filmsGeneralListElement, FILM_CARD_COUNT_IN_CARDLIST);
-
-function renderGeneralCards(filmsListElement, numberOfCards) {
+function renderCards(filmsListElement, cardsToRender) {
   const filmsListContainerElement = filmsListElement.querySelector(`.films-list__container`);
 
-  [...new Array(numberOfCards)]
-  .forEach(
-      () => render(filmsListContainerElement, createFilmCardTemplate(generateCard()), `beforeend`)
+  cardsToRender.forEach(
+      (card) => render(filmsListContainerElement, createFilmCardTemplate(card), `beforeend`)
   );
 }
-
-render(filmsGeneralListElement, createShowMoreButtonTemplate(), `beforeend`);
-render(siteMainElement, createFilmPopupTemplate(generateFilmPopup()), `beforeend`);
 
 function render(container, template, place) {
   container.insertAdjacentHTML(place, template);
