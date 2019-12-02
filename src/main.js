@@ -29,7 +29,9 @@ renderHeader();
 
 renderGeneralCards();
 
-renderExtraCards();
+renderTopRatedCards();
+
+renderMostCommentedCards();
 
 render(filmsGeneralListElement, createShowMoreButtonTemplate(), `beforeend`);
 // render(siteMainElement, createFilmPopupTemplate(generateFilmPopup()), `beforeend`);
@@ -45,12 +47,16 @@ function renderGeneralCards() {
   renderCards(filmsGeneralListElement, generalCards);
 }
 
-function renderExtraCards() {
-  const filmsListExtraElements = filmsElement.querySelectorAll(`.films-list--extra`);
+function renderTopRatedCards() {
+  const topRatedCardsElement = filmsElement.querySelector(`.films-list--top-rated`);
 
-  filmsListExtraElements.forEach((filmsListExtraElement) => {
-    renderCards(filmsListExtraElement, extraCards);
-  });
+  renderCards(topRatedCardsElement, extraCards);
+}
+
+function renderMostCommentedCards() {
+  const mostCommentedCardsElement = filmsElement.querySelector(`.films-list--most-commented`);
+
+  renderCards(mostCommentedCardsElement, extraCards);
 }
 
 function renderCards(filmsListElement, cardsToRender) {
