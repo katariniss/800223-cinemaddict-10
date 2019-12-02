@@ -84,7 +84,8 @@ const generateCard = () => {
     poster: getRandomArrayItem(FilmsPosters),
     toWatch: Math.random() > 0.5,
     isWatched: Math.random() > 0.5,
-    isFavourite: Math.random() > 0.5
+    isFavourite: Math.random() > 0.5,
+    commentsCount: getRandomIntegerNumber(0, 20)
   };
 };
 

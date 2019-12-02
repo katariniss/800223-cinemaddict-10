@@ -14,7 +14,6 @@ const FILM_CARD_COUNT_IN_CARDLIST = 10;
 const FILM_CARD_COUNT_IN_EXTRA = 2;
 
 const generalCards = generateCards(FILM_CARD_COUNT_IN_CARDLIST);
-const extraCards = generateCards(FILM_CARD_COUNT_IN_EXTRA);
 
 const siteMainElement = document.querySelector(`.main`);
 
@@ -51,13 +50,14 @@ function renderTopRatedCards() {
   const topRatedCards = generalCards.sort((a, b) => (a.rating < b.rating) ? 1 : -1);
   const topRatedCardsElement = filmsElement.querySelector(`.films-list--top-rated`);
 
-  renderCards(topRatedCardsElement, topRatedCards.slice(0, 2));
+  renderCards(topRatedCardsElement, topRatedCards.slice(0, FILM_CARD_COUNT_IN_EXTRA));
 }
 
 function renderMostCommentedCards() {
+  const mostCommentedCards = generalCards.sort((a, b) => (a.commentsCount < b.commentsCount) ? 1 : -1);
   const mostCommentedCardsElement = filmsElement.querySelector(`.films-list--most-commented`);
 
-  renderCards(mostCommentedCardsElement, extraCards);
+  renderCards(mostCommentedCardsElement, mostCommentedCards.slice(0, FILM_CARD_COUNT_IN_EXTRA));
 }
 
 function renderCards(filmsListElement, cardsToRender) {
