@@ -1,3 +1,5 @@
+import {getRandomArrayItem, getRandomIntegerNumber, getRandomDecimal} from '../utils.js';
+
 const FilmsList = [
   `Matrix`,
   `Green Book`,
@@ -81,20 +83,6 @@ const generateCard = () => {
     genre: getRandomArrayItem(FilmsGenres),
     poster: getRandomArrayItem(FilmsPosters),
   };
-};
-
-const getRandomArrayItem = (array) => {
-  const randomIndex = getRandomIntegerNumber(0, array.length);
-
-  return array[randomIndex];
-};
-
-const getRandomIntegerNumber = (min, max) => {
-  return min + Math.floor(max * Math.random());
-};
-
-const getRandomDecimal = (min, max) => {
-  return ((max - min) * Math.random()).toFixed(1);
 };
 
 export {generateCard, generateCards};

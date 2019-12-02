@@ -1,4 +1,5 @@
 import {generateCard} from './card.js';
+import {getRandomArrayItem, getRandomIntegerNumber} from '../utils.js';
 
 const Countries = [`USA`,
   `UK`,
@@ -34,16 +35,6 @@ const generateFilmPopup = () => {
   originalCard.actor = getRandomArrayItem(Actors);
   originalCard.ageRestriction = getRandomArrayItem(Ages);
   return originalCard;
-};
-
-const getRandomArrayItem = (array) => {
-  const randomIndex = getRandomIntegerNumber(0, array.length);
-
-  return array[randomIndex];
-};
-
-const getRandomIntegerNumber = (min, max) => {
-  return min + Math.floor(max * Math.random());
 };
 
 export {generateFilmPopup};
