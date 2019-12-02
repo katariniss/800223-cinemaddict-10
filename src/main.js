@@ -8,6 +8,7 @@ import {createSortingTemplate} from './components/sorting.js';
 import {createUserTitleTemplate} from './components/user-title.js';
 
 import {generateCard} from './mocks/card.js';
+import {generateFilmPopup} from './mocks/film-popup';
 
 const FILM_CARD_COUNT_IN_CARDLIST = 5;
 const FILM_CARD_COUNT_IN_EXTRA = 2;
@@ -49,7 +50,7 @@ function renderGeneralCards(filmsListElement, numberOfCards) {
 }
 
 render(filmsGeneralListElement, createShowMoreButtonTemplate(), `beforeend`);
-render(siteMainElement, createFilmPopupTemplate(), `beforeend`);
+render(siteMainElement, createFilmPopupTemplate(generateFilmPopup()), `beforeend`);
 
 function render(container, template, place) {
   container.insertAdjacentHTML(place, template);
