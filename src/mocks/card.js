@@ -82,6 +82,9 @@ const generateCard = () => {
     totalDuration: `${DurationInHours}h ${DurationInMinutes}m`,
     genre: getRandomArrayItem(FilmsGenres),
     poster: getRandomArrayItem(FilmsPosters),
+    toWatch: Math.random() > 0.5,
+    isWatched: Math.random() > 0.5,
+    isFavourite: Math.random() > 0.5
   };
 };
 
