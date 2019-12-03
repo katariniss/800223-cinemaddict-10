@@ -12,12 +12,13 @@ import {generateFilters} from './mocks/filter.js';
 
 import {generateFilmPopup} from './mocks/film-popup';
 
-const FILM_CARD_COUNT_IN_CARDLIST = 10;
+const FILM_CARD_COUNT_TO_GENERATE = 15;
 const FILM_CARD_COUNT_IN_EXTRA = 2;
+const SHOW_MORE_CARD_COUNT = 5;
 
-const generalCards = generateCards(FILM_CARD_COUNT_IN_CARDLIST);
-let filterType = `all`;
-let filteredCards = generalCards;
+const allCards = generateCards(FILM_CARD_COUNT_TO_GENERATE);
+let filteredCards = allCards;
+let shownCards = [];
 
 const siteMainElement = document.querySelector(`.main`);
 
@@ -30,6 +31,8 @@ const filmsGeneralListElement = filmsElement.querySelector(`.films-list`);
 
 
 renderHeader();
+
+tryToShowMore();
 
 renderGeneralCards();
 
@@ -48,18 +51,18 @@ function renderHeader() {
 }
 
 function renderGeneralCards() {
-  renderCards(filmsGeneralListElement, filteredCards);
+  renderCards(filmsGeneralListElement, shownCards);
 }
 
 function renderTopRatedCards() {
-  const topRatedCards = generalCards.sort((a, b) => (a.rating < b.rating) ? 1 : -1);
+  const topRatedCards = allCards.sort((a, b) => (a.rating < b.rating) ? 1 : -1);
   const topRatedCardsElement = filmsElement.querySelector(`.films-list--top-rated`);
 
   renderCards(topRatedCardsElement, topRatedCards.slice(0, FILM_CARD_COUNT_IN_EXTRA));
 }
 
 function renderMostCommentedCards() {
-  const mostCommentedCards = generalCards.sort((a, b) => (a.commentsCount < b.commentsCount) ? 1 : -1);
+  const mostCommentedCards = allCards.sort((a, b) => (a.commentsCount < b.commentsCount) ? 1 : -1);
   const mostCommentedCardsElement = filmsElement.querySelector(`.films-list--most-commented`);
 
   renderCards(mostCommentedCardsElement, mostCommentedCards.slice(0, FILM_CARD_COUNT_IN_EXTRA));
@@ -83,18 +86,39 @@ const history = document.querySelector(`.main-navigation__item--History`);
 const favorites = document.querySelector(`.main-navigation__item--Favorites`);
 
 watchlist.addEventListener(`click`, function () {
-  filterType = `watchlist`;
-  filteredCards = generalCards.filter(card => card.toWatch === true);
+  filteredCards = allCards.filter(card => card.toWatch === true);
   renderGeneralCards();
 });
 history.addEventListener(`click`, function () {
-  filterType = `history`;
-  filteredCards = generalCards.filter(card => card.isWatched === true);
+  filteredCards = allCards.filter(card => card.isWatched === true);
   renderGeneralCards();
 
 });
 favorites.addEventListener(`click`, function () {
-  filterType = `favorites`;
-  filteredCards = generalCards.filter(card => card.isFavourite === true);
+  filteredCards = allCards.filter(card => card.isFavourite === true);
   renderGeneralCards();
 });
+
+const showMoreButton = document.querySelector(`.films-list__show-more`);
+showMoreButton.addEventListener(`click`, () => {
+  if (!tryToShowMore()) {
+    showMoreButton.style.display = 'none';
+  }
+
+  renderGeneralCards();
+});
+
+function tryToShowMore() {
+  const endIndex = shownCards.length + SHOW_MORE_CARD_COUNT;
+
+  let newCardsToShow = [];
+  if (endIndex >= filteredCards.length) {
+    newCardsToShow = filteredCards.slice(shownCards.length);
+  } else {
+    newCardsToShow = filteredCards.slice(shownCards.length, endIndex);
+  }
+
+  shownCards = [...shownCards, ...newCardsToShow];
+
+  return filteredCards.length !== shownCards.length;
+}
