@@ -2,7 +2,7 @@ export const createSiteMenuMarkup = (filter) => {
   const {name, count} = filter;
 
   return (
-    `<a href="#${name}" class="main-navigation__item main-navigation__item--${name}">${name}<span class="main-navigation__item-count">${count}</span></a>`
+    `<a href="#${name}" class="main-navigation__item main-navigation__item--${name.toLowerCase()}">${name}<span class="main-navigation__item-count">${count}</span></a>`
   );
 };
 
