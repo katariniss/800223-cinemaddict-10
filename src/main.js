@@ -1,16 +1,14 @@
 import {createFilmCardTemplate} from './components/card.js';
-import {createFilmPopupTemplate} from './components/film-popup.js';
+// import {createFilmPopupTemplate} from './components/film-popup.js';
 import {createFilmsListTemplate} from './components/films-list.js';
 import {createSiteMenuTemplate} from './components/menu.js';
 import {createSearchTemplate} from './components/search.js';
 import {createShowMoreButtonTemplate} from './components/show-more.js';
 import {createSortingTemplate} from './components/sorting.js';
 import {createUserTitleTemplate} from './components/user-title.js';
-
-import {generateCard, generateCards} from './mocks/card.js';
+import {generateCards} from './mocks/card.js';
 import {generateFilters} from './mocks/filter.js';
-
-import {generateFilmPopup} from './mocks/film-popup';
+// import {generateFilmPopup} from './mocks/film-popup';
 
 const FILM_CARD_COUNT_TO_GENERATE = 15;
 const FILM_CARD_COUNT_IN_EXTRA = 2;
@@ -29,10 +27,9 @@ render(siteMainElement, createFilmsListTemplate(), `beforeend`);
 const filmsElement = siteMainElement.querySelector(`.films`);
 const filmsGeneralListElement = filmsElement.querySelector(`.films-list`);
 
+tryToShowMore();
 
 renderHeader();
-
-tryToShowMore();
 
 renderGeneralCards();
 
@@ -58,19 +55,22 @@ function renderTopRatedCards() {
   const topRatedCards = allCards.sort((a, b) => (a.rating < b.rating) ? 1 : -1);
   const topRatedCardsElement = filmsElement.querySelector(`.films-list--top-rated`);
 
-  renderCards(topRatedCardsElement, topRatedCards.slice(0, FILM_CARD_COUNT_IN_EXTRA));
+  if (topRatedCards.some((card) => card.rating > 0)) {
+    renderCards(topRatedCardsElement, topRatedCards.slice(0, FILM_CARD_COUNT_IN_EXTRA));
+  }
 }
 
 function renderMostCommentedCards() {
   const mostCommentedCards = allCards.sort((a, b) => (a.commentsCount < b.commentsCount) ? 1 : -1);
   const mostCommentedCardsElement = filmsElement.querySelector(`.films-list--most-commented`);
-
-  renderCards(mostCommentedCardsElement, mostCommentedCards.slice(0, FILM_CARD_COUNT_IN_EXTRA));
+  if (mostCommentedCards.some((card) => card.commentsCount > 0)) {
+    renderCards(mostCommentedCardsElement, mostCommentedCards.slice(0, FILM_CARD_COUNT_IN_EXTRA));
+  }
 }
 
 function renderCards(filmsListElement, cardsToRender) {
   const filmsListContainerElement = filmsListElement.querySelector(`.films-list__container`);
-  filmsListContainerElement.innerHTML = '';
+  filmsListContainerElement.innerHTML = ``;
   cardsToRender.forEach(
       (card) => render(filmsListContainerElement, createFilmCardTemplate(card), `beforeend`)
   );
@@ -80,29 +80,36 @@ function render(container, template, place) {
   container.insertAdjacentHTML(place, template);
 }
 
-const allFilms = document.querySelector(`.main-navigation__item--all`);
-const watchlist = document.querySelector(`.main-navigation__item--Watchlist`);
-const history = document.querySelector(`.main-navigation__item--History`);
-const favorites = document.querySelector(`.main-navigation__item--Favorites`);
+const watchlist = document.querySelector(`.main-navigation__item--watchlist`);
+const history = document.querySelector(`.main-navigation__item--history`);
+const favorites = document.querySelector(`.main-navigation__item--favorites`);
 
 watchlist.addEventListener(`click`, function () {
-  filteredCards = allCards.filter(card => card.toWatch === true);
-  renderGeneralCards();
+  filteredCards = allCards.filter((card) => card.toWatch);
+  handleNewFilteredCards();
 });
-history.addEventListener(`click`, function () {
-  filteredCards = allCards.filter(card => card.isWatched === true);
-  renderGeneralCards();
 
+history.addEventListener(`click`, function () {
+  filteredCards = allCards.filter((card) => card.isWatched);
+  handleNewFilteredCards();
 });
+
 favorites.addEventListener(`click`, function () {
-  filteredCards = allCards.filter(card => card.isFavourite === true);
-  renderGeneralCards();
+  filteredCards = allCards.filter((card) => card.isFavourite);
+  handleNewFilteredCards();
 });
+
+function handleNewFilteredCards() {
+  shownCards = [];
+  showMoreButton.style.display = `block`;
+  tryToShowMore();
+  renderGeneralCards();
+}
 
 const showMoreButton = document.querySelector(`.films-list__show-more`);
 showMoreButton.addEventListener(`click`, () => {
   if (!tryToShowMore()) {
-    showMoreButton.style.display = 'none';
+    showMoreButton.style.display = `none`;
   }
 
   renderGeneralCards();
