@@ -8,7 +8,6 @@ import SortingComponent from './components/sorting.js';
 import UserTitleComponent from './components/user-title.js';
 import {generateCards} from './mocks/card.js';
 import {generateFilters} from './mocks/filter.js';
-import {generateFilmPopup} from './mocks/film-popup';
 
 import {render, RenderPosition} from './utils.js';
 
@@ -46,8 +45,6 @@ renderMostCommentedCards();
 
 const showMoreButtonComponent = new ShowMoreButtonComponent();
 render(filmsGeneralListElement, showMoreButtonComponent.getElement(), RenderPosition.BEFOREEND);
-
-
 
 function renderHeader() {
   const siteHeaderElement = document.querySelector(`.header`);
@@ -107,7 +104,6 @@ function renderCards(filmsListElement, cardsToRender) {
         filmPopupCloseButton.addEventListener(`click`, () => {
           filmPopupElement.remove();
         });
-
 
         render(filmsListContainerElement, filmCardElement, RenderPosition.BEFOREEND);
       }
