@@ -1,6 +1,6 @@
 import {createElement} from '../utils.js';
 
-const createSiteMenuMarkup = (filter) => {
+const createFiltersMarkup = (filter) => {
   const {name, count} = filter;
 
   return (
@@ -8,8 +8,8 @@ const createSiteMenuMarkup = (filter) => {
   );
 };
 
-const createSiteMenuTemplate = (filters) => {
-  const filtersMarkup = filters.map((it, i) => createSiteMenuMarkup(it, i === 0)).join(`\n`);
+const createFiltersTemplate = (filters) => {
+  const filtersMarkup = filters.map((it, i) => createFiltersMarkup(it, i === 0)).join(`\n`);
 
   return (
     `<nav class="main-navigation">
@@ -20,14 +20,14 @@ const createSiteMenuTemplate = (filters) => {
   );
 };
 
-export default class SiteMenu {
+export default class Filters {
   constructor(filters) {
     this._filters = filters;
     this._element = null;
   }
 
   getTemplate() {
-    return createSiteMenuTemplate(this._filters);
+    return createFiltersTemplate(this._filters);
   }
 
   getElement() {

@@ -1,7 +1,7 @@
 import FilmCardComponent from './components/card.js';
 import FilmPopupComponent from './components/film-popup.js';
 import FilmsListComponent from './components/films-list.js';
-import SiteMenuComponent from './components/menu.js';
+import FiltersComponent from './components/filters.js';
 import SearchComponent from './components/search.js';
 import ShowMoreButtonComponent from './components/show-more.js';
 import SortingComponent from './components/sorting.js';
@@ -22,7 +22,7 @@ let shownCards = [];
 
 const siteMainElement = document.querySelector(`.main`);
 
-const siteMenuComponent = new SiteMenuComponent(generateFilters());
+const siteMenuComponent = new FiltersComponent(generateFilters());
 render(siteMainElement, siteMenuComponent.getElement(), RenderPosition.BEFOREEND);
 
 const sortingComponent = new SortingComponent();
