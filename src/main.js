@@ -8,6 +8,8 @@ import {createSortingTemplate} from './components/sorting.js';
 import {createUserTitleTemplate} from './components/user-title.js';
 import {generateCards} from './mocks/card.js';
 import {generateFilters} from './mocks/filter.js';
+
+import {render, RenderPosition} from './utils.js';
 // import {generateFilmPopup} from './mocks/film-popup';
 
 const FILM_CARD_COUNT_TO_GENERATE = 15;
