@@ -47,7 +47,7 @@ renderMostCommentedCards();
 const showMoreButtonComponent = new ShowMoreButtonComponent();
 render(filmsGeneralListElement, showMoreButtonComponent.getElement(), RenderPosition.BEFOREEND);
 
-render(siteMainElement, new FilmPopupComponent(generateFilmPopup()).getElement(), RenderPosition.BEFOREEND);
+
 
 function renderHeader() {
   const siteHeaderElement = document.querySelector(`.header`);
@@ -84,7 +84,33 @@ function renderCards(filmsListElement, cardsToRender) {
   const filmsListContainerElement = filmsListElement.querySelector(`.films-list__container`);
   filmsListContainerElement.innerHTML = ``;
   cardsToRender.forEach(
-      (card) => render(filmsListContainerElement, new FilmCardComponent(card).getElement(), RenderPosition.BEFOREEND)
+      (card) => {
+        const filmCardComponent = new FilmCardComponent(card);
+        const filmCardElement = filmCardComponent.getElement();
+
+        const filmPopupComponent = new FilmPopupComponent(card);
+        const filmPopupElement = filmPopupComponent.getElement();
+
+        const filmPoster = filmCardElement.querySelector(`.film-card__poster`);
+        const filmName = filmCardElement.querySelector(`.film-card__title`);
+        const filmComments = filmCardElement.querySelector(`.film-card__comments`);
+
+        filmPoster.addEventListener(`click`, handleCardClick);
+        filmName.addEventListener(`click`, handleCardClick);
+        filmComments.addEventListener(`click`, handleCardClick);
+
+        function handleCardClick() {
+          render(filmsListContainerElement, filmPopupElement, RenderPosition.BEFOREEND);
+        }
+
+        const filmPopupCloseButton = filmPopupElement.querySelector(`.film-details__close-btn`);
+        filmPopupCloseButton.addEventListener(`click`, () => {
+          filmPopupElement.remove();
+        });
+
+
+        render(filmsListContainerElement, filmCardElement, RenderPosition.BEFOREEND);
+      }
   );
 }
 
