@@ -1,4 +1,6 @@
-export const createSiteMenuMarkup = (filter) => {
+import {createElement} from '../utils.js';
+
+const createSiteMenuMarkup = (filter) => {
   const {name, count} = filter;
 
   return (
@@ -6,7 +8,7 @@ export const createSiteMenuMarkup = (filter) => {
   );
 };
 
-export const createSiteMenuTemplate = (filters) => {
+const createSiteMenuTemplate = (filters) => {
   const filtersMarkup = filters.map((it, i) => createSiteMenuMarkup(it, i === 0)).join(`\n`);
 
   return (
@@ -17,3 +19,26 @@ export const createSiteMenuTemplate = (filters) => {
     </nav>`
   );
 };
+
+export default class SiteMenu {
+  constructor(filters) {
+    this._filters = filters;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createSiteMenuTemplate(this._filters);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
