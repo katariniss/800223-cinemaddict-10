@@ -10,6 +10,8 @@ import {generateCards} from './mocks/card.js';
 import {generateFilters} from './mocks/filter.js';
 // import {generateFilmPopup} from './mocks/film-popup';
 
+import {render, RenderPosition} from './utils.js';
+
 const FILM_CARD_COUNT_TO_GENERATE = 15;
 const FILM_CARD_COUNT_IN_EXTRA = 2;
 const SHOW_MORE_CARD_COUNT = 5;
@@ -74,10 +76,6 @@ function renderCards(filmsListElement, cardsToRender) {
   cardsToRender.forEach(
       (card) => render(filmsListContainerElement, createFilmCardTemplate(card), `beforeend`)
   );
-}
-
-function render(container, template, place) {
-  container.insertAdjacentHTML(place, template);
 }
 
 const watchlist = document.querySelector(`.main-navigation__item--watchlist`);
