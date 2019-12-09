@@ -159,3 +159,6 @@ function tryToShowMore() {
 
   return filteredCards.length !== shownCards.length;
 }
+
+const footerStatisticElement = document.querySelector(`.footer__statistics p`);
+footerStatisticElement.textContent = `${allCards.length} movies inside`;
