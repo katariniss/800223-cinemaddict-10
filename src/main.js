@@ -162,3 +162,17 @@ function tryToShowMore() {
 
 const footerStatisticElement = document.querySelector(`.footer__statistics p`);
 footerStatisticElement.textContent = `${allCards.length} movies inside`;
+
+const onEscKeyDown = (evt) => {
+  const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+  if (isEscKey) {
+    const filmPopup = document.querySelector(`.film-details`);
+
+    if (filmPopup) {
+      filmPopup.remove();
+    }
+  }
+};
+
+document.addEventListener(`keydown`, onEscKeyDown);
