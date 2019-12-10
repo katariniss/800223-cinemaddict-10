@@ -86,7 +86,6 @@ function renderCards(filmsListElement, cardsToRender) {
         const filmCardElement = filmCardComponent.getElement();
 
         const filmPopupComponent = new FilmPopupComponent(card);
-        const filmPopupElement = filmPopupComponent.getElement();
 
         const filmPoster = filmCardElement.querySelector(`.film-card__poster`);
         const filmName = filmCardElement.querySelector(`.film-card__title`);
@@ -97,13 +96,8 @@ function renderCards(filmsListElement, cardsToRender) {
         filmComments.addEventListener(`click`, handleCardClick);
 
         function handleCardClick() {
-          render(filmsListContainerElement, filmPopupElement, RenderPosition.BEFOREEND);
+          render(filmsListContainerElement, filmPopupComponent.getElement(), RenderPosition.BEFOREEND);
         }
-
-        const filmPopupCloseButton = filmPopupElement.querySelector(`.film-details__close-btn`);
-        filmPopupCloseButton.addEventListener(`click`, () => {
-          filmPopupElement.remove();
-        });
 
         render(filmsListContainerElement, filmCardElement, RenderPosition.BEFOREEND);
       }

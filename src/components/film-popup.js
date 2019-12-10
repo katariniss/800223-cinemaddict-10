@@ -1,4 +1,4 @@
-import {createElement} from '../utils.js';
+import { createElement } from '../utils.js';
 
 const createFilmPopupTemplate = (filmPopup) => {
 
@@ -198,6 +198,14 @@ export default class FilmPopup {
   constructor(filmPopup) {
     this._filmPopup = filmPopup;
     this._element = null;
+
+    this.onClose = () => {
+      this._element
+        .querySelector(`.film-details__close-btn`)
+        .removeEventListener(`click`, this.onClose);
+
+      this.removeElement();
+    };
   }
 
   getTemplate() {
@@ -207,12 +215,18 @@ export default class FilmPopup {
   getElement() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
+
+      this._element
+        .querySelector(`.film-details__close-btn`)
+        .addEventListener(`click`, this.onClose);
     }
 
     return this._element;
   }
 
   removeElement() {
+    this._element.remove();
+
     this._element = null;
   }
 }
