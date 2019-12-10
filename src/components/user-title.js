@@ -1,3 +1,5 @@
+import {createElement} from '../utils.js';
+
 const getUserTitle = (watchedFilmsNumber) => {
   if (watchedFilmsNumber === 0) {
     return ``;
@@ -9,7 +11,7 @@ const getUserTitle = (watchedFilmsNumber) => {
   return `Movie Buff`;
 };
 
-export const createUserTitleTemplate = () => {
+const createUserTitleTemplate = () => {
   return (
     `<section class="header__profile profile">
         <p class="profile__rating">${getUserTitle(21)}</p>
@@ -17,3 +19,25 @@ export const createUserTitleTemplate = () => {
     </section>`
   );
 };
+
+export default class UserTitle {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createUserTitleTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

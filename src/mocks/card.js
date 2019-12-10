@@ -54,6 +54,30 @@ const FilmsPosters = [
   `the-man-with-the-golden-arm.jpg`
 ];
 
+const Countries = [`USA`,
+  `UK`,
+  `Australia`,
+  `Germany`,
+];
+const Months = [`January`,
+  `February`,
+  `March`,
+  `April`,
+  `May`,
+  `June`,
+  `July`,
+  `August`,
+  `September`,
+  `October`,
+  `November`,
+  `December`,
+];
+const Directors = [`Anthony Mann`, `Stephen Spielberg`, `Martin Scorcese`, `Quentin Tarantino`];
+const Writers = [`Anne Wigton`, ` Heinz Herald`, `Richard Weil`];
+const Actors = [`Leonardo DiCaprio`, `Brad Pitt`, `Steve Carell`, `John Krasinski`];
+const Ages = [6, 12, 16, 18];
+
+
 const generateCards = (count) => {
   return [...new Array(count)]
     .map(generateCard);
@@ -85,7 +109,15 @@ const generateCard = () => {
     toWatch: Math.random() > 0.5,
     isWatched: Math.random() > 0.5,
     isFavourite: Math.random() > 0.5,
-    commentsCount: getRandomIntegerNumber(0, 20)
+    commentsCount: getRandomIntegerNumber(0, 20),
+    subtitle: getRandomArrayItem(FilmsList),
+    country: getRandomArrayItem(Countries),
+    month: getRandomArrayItem(Months),
+    releaseDay: getRandomIntegerNumber(0, 30),
+    director: getRandomArrayItem(Directors),
+    writer: getRandomArrayItem(Writers),
+    actor: getRandomArrayItem(Actors),
+    ageRestriction: getRandomArrayItem(Ages)
   };
 };
 
