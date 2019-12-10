@@ -1,4 +1,4 @@
-import { createElement } from '../utils.js';
+import {createElement} from '../utils.js';
 
 const createFilmPopupTemplate = (filmPopup) => {
 
@@ -204,7 +204,17 @@ export default class FilmPopup {
         .querySelector(`.film-details__close-btn`)
         .removeEventListener(`click`, this.onClose);
 
+      document.removeEventListener(`keydown`, this.onEscKeyDown);
+
       this.removeElement();
+    };
+
+    this.onEscKeyDown = (evt) => {
+      const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+      if (isEscKey) {
+        this.onClose();
+      }
     };
   }
 
@@ -219,6 +229,8 @@ export default class FilmPopup {
       this._element
         .querySelector(`.film-details__close-btn`)
         .addEventListener(`click`, this.onClose);
+
+      document.addEventListener(`keydown`, this.onEscKeyDown);
     }
 
     return this._element;
