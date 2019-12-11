@@ -6,6 +6,7 @@ import SearchComponent from './components/search.js';
 import ShowMoreButtonComponent from './components/show-more.js';
 import SortingComponent from './components/sorting.js';
 import UserTitleComponent from './components/user-title.js';
+import NoCardsComponent from './components/no-cards.js';
 import {generateCards} from './mocks/card.js';
 import {generateFilters} from './mocks/filter.js';
 
@@ -104,6 +105,12 @@ function renderCards(filmsListElement, cardsToRender) {
   );
 }
 
+if (allCards.length > 0) {
+  renderCards(filmsGeneralListElement, shownCards);
+} else {
+  render(filmsGeneralListElement, new NoCardsComponent().getElement(), RenderPosition.AFTERBEGIN);
+}
+
 const watchlist = document.querySelector(`.main-navigation__item--watchlist`);
 const history = document.querySelector(`.main-navigation__item--history`);
 const favorites = document.querySelector(`.main-navigation__item--favorites`);
@@ -152,6 +159,10 @@ function tryToShowMore() {
   shownCards = [...shownCards, ...newCardsToShow];
 
   return filteredCards.length !== shownCards.length;
+}
+
+if (allCards.length === 0 || allCards.length < SHOW_MORE_CARD_COUNT) {
+  showMoreButton.style.display = `none`;
 }
 
 const footerStatisticElement = document.querySelector(`.footer__statistics p`);
