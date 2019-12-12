@@ -7,10 +7,10 @@ import ShowMoreButtonComponent from './components/show-more.js';
 import SortingComponent from './components/sorting.js';
 import UserTitleComponent from './components/user-title.js';
 import NoCardsComponent from './components/no-cards.js';
-import {generateCards} from './mocks/card.js';
-import {generateFilters} from './mocks/filter.js';
+import { generateCards } from './mocks/card.js';
+import { generateFilters } from './mocks/filter.js';
 
-import {render, RenderPosition} from './utils.js';
+import { render, RenderPosition } from './utils.js';
 
 const FILM_CARD_COUNT_TO_GENERATE = 15;
 const FILM_CARD_COUNT_IN_EXTRA = 2;
@@ -98,8 +98,10 @@ function renderCards(filmsListElement, cardsToRender) {
 
         function handleCardClick() {
           render(filmsListContainerElement, filmPopupComponent.getElement(), RenderPosition.BEFOREEND);
+          document.addEventListener(`keydown`, onEscKeyDown);
+          const closePopupButton = document.querySelector(`.film-details__close-btn`);
+          closePopupButton.addEventListener(`click`, onPopupCloseClick);
         }
-
         render(filmsListContainerElement, filmCardElement, RenderPosition.BEFOREEND);
       }
   );
@@ -167,3 +169,24 @@ if (allCards.length === 0 || allCards.length < SHOW_MORE_CARD_COUNT) {
 
 const footerStatisticElement = document.querySelector(`.footer__statistics p`);
 footerStatisticElement.textContent = `${allCards.length} movies inside`;
+
+const onEscKeyDown = (evt) => {
+  const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+  if (isEscKey) {
+    removePopup();
+    document.removeEventListener(`keydown`, onEscKeyDown);
+  }
+};
+
+const onPopupCloseClick = () => {
+  const closePopupButton = document.querySelector(`.film-details__close-btn`);
+  closePopupButton.removeEventListener(`click`, onPopupCloseClick);
+  removePopup();
+};
+
+const removePopup = () => {
+  const popup = document.querySelector(`.film-details`);
+  if (popup) {
+    popup.remove();
+  }
+};
