@@ -6,6 +6,7 @@ import SearchComponent from './components/search.js';
 import ShowMoreButtonComponent from './components/show-more.js';
 import SortingComponent from './components/sorting.js';
 import UserTitleComponent from './components/user-title.js';
+import NoCardsComponent from './components/no-cards.js';
 import {generateCards} from './mocks/card.js';
 import {generateFilters} from './mocks/filter.js';
 
@@ -86,7 +87,6 @@ function renderCards(filmsListElement, cardsToRender) {
         const filmCardElement = filmCardComponent.getElement();
 
         const filmPopupComponent = new FilmPopupComponent(card);
-        const filmPopupElement = filmPopupComponent.getElement();
 
         const filmPoster = filmCardElement.querySelector(`.film-card__poster`);
         const filmName = filmCardElement.querySelector(`.film-card__title`);
@@ -97,17 +97,18 @@ function renderCards(filmsListElement, cardsToRender) {
         filmComments.addEventListener(`click`, handleCardClick);
 
         function handleCardClick() {
-          render(filmsListContainerElement, filmPopupElement, RenderPosition.BEFOREEND);
+          render(filmsListContainerElement, filmPopupComponent.getElement(), RenderPosition.BEFOREEND);
         }
-
-        const filmPopupCloseButton = filmPopupElement.querySelector(`.film-details__close-btn`);
-        filmPopupCloseButton.addEventListener(`click`, () => {
-          filmPopupElement.remove();
-        });
 
         render(filmsListContainerElement, filmCardElement, RenderPosition.BEFOREEND);
       }
   );
+}
+
+if (allCards.length > 0) {
+  renderCards(filmsGeneralListElement, shownCards);
+} else {
+  render(filmsGeneralListElement, new NoCardsComponent().getElement(), RenderPosition.AFTERBEGIN);
 }
 
 const watchlist = document.querySelector(`.main-navigation__item--watchlist`);
@@ -158,6 +159,10 @@ function tryToShowMore() {
   shownCards = [...shownCards, ...newCardsToShow];
 
   return filteredCards.length !== shownCards.length;
+}
+
+if (allCards.length === 0 || allCards.length < SHOW_MORE_CARD_COUNT) {
+  showMoreButton.style.display = `none`;
 }
 
 const footerStatisticElement = document.querySelector(`.footer__statistics p`);

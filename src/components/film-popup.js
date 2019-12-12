@@ -198,6 +198,24 @@ export default class FilmPopup {
   constructor(filmPopup) {
     this._filmPopup = filmPopup;
     this._element = null;
+
+    this.onClose = () => {
+      this._element
+        .querySelector(`.film-details__close-btn`)
+        .removeEventListener(`click`, this.onClose);
+
+      document.removeEventListener(`keydown`, this.onEscKeyDown);
+
+      this.removeElement();
+    };
+
+    this.onEscKeyDown = (evt) => {
+      const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+      if (isEscKey) {
+        this.onClose();
+      }
+    };
   }
 
   getTemplate() {
@@ -207,12 +225,20 @@ export default class FilmPopup {
   getElement() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
+
+      this._element
+        .querySelector(`.film-details__close-btn`)
+        .addEventListener(`click`, this.onClose);
+
+      document.addEventListener(`keydown`, this.onEscKeyDown);
     }
 
     return this._element;
   }
 
   removeElement() {
+    this._element.remove();
+
     this._element = null;
   }
 }
