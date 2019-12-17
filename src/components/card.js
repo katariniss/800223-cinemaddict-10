@@ -1,4 +1,4 @@
-import {createElement} from '../utils.js';
+import AbstractComponent from './abstract-component.js';
 
 const createFilmCardTemplate = ({
   name,
@@ -34,26 +34,26 @@ const createFilmCardTemplate = ({
   );
 };
 
-export default class Card {
+export default class Card extends AbstractComponent {
   constructor(card) {
-    this._card = card;
+    super();
 
-    this._element = null;
+    this._card = card;
   }
 
   getTemplate() {
     return createFilmCardTemplate(this._card);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  setPosterClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, handler);
   }
 
-  removeElement() {
-    this._element = null;
+  setFilmNameClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__title`).addEventListener(`click`, handler);
+  }
+
+  setCommentsClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, handler);
   }
 }

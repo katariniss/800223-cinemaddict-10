@@ -1,4 +1,5 @@
-import {createElement} from '../utils.js';
+import AbstractComponent from './abstract-component.js';
+
 
 const createFilmPopupTemplate = (filmPopup) => {
 
@@ -194,51 +195,17 @@ const createFilmPopupTemplate = (filmPopup) => {
   );
 };
 
-export default class FilmPopup {
+export default class FilmPopup extends AbstractComponent {
   constructor(filmPopup) {
+    super();
     this._filmPopup = filmPopup;
-    this._element = null;
-
-    this.onClose = () => {
-      this._element
-        .querySelector(`.film-details__close-btn`)
-        .removeEventListener(`click`, this.onClose);
-
-      document.removeEventListener(`keydown`, this.onEscKeyDown);
-
-      this.removeElement();
-    };
-
-    this.onEscKeyDown = (evt) => {
-      const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-
-      if (isEscKey) {
-        this.onClose();
-      }
-    };
   }
 
   getTemplate() {
     return createFilmPopupTemplate(this._filmPopup);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-
-      this._element
-        .querySelector(`.film-details__close-btn`)
-        .addEventListener(`click`, this.onClose);
-
-      document.addEventListener(`keydown`, this.onEscKeyDown);
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element.remove();
-
-    this._element = null;
+  setCloseButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, handler);
   }
 }

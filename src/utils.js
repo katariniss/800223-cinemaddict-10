@@ -21,6 +21,11 @@ const render = (container, element, place) => {
   }
 };
 
+const remove = (component) => {
+  component.getElement().remove();
+  component.removeElement();
+};
+
 const getRandomArrayItem = (array) => {
   const randomIndex = getRandomIntegerNumber(0, array.length);
 
@@ -35,4 +40,4 @@ const getRandomDecimal = (min, max) => {
   return ((max - min) * Math.random()).toFixed(1);
 };
 
-export {RenderPosition, createElement, render, getRandomArrayItem, getRandomIntegerNumber, getRandomDecimal};
+export {RenderPosition, createElement, render, remove, getRandomArrayItem, getRandomIntegerNumber, getRandomDecimal};
