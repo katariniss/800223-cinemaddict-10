@@ -4,12 +4,12 @@ import FilmsListComponent from '../components/films-list.js';
 import FiltersComponent from '../components/filters.js';
 import SearchComponent from '../components/search.js';
 import ShowMoreButtonComponent from '../components/show-more.js';
-import SortingComponent, { SortType } from '../components/sorting.js';
+import SortingComponent, {SortType} from '../components/sorting.js';
 import UserTitleComponent from '../components/user-title.js';
 import NoCardsComponent from '../components/no-cards.js';
-import { render, RenderPosition } from '../utils.js';
+import {render, RenderPosition} from '../utils.js';
 
-import { generateFilters } from '../mocks/filter.js';
+import {generateFilters} from '../mocks/filter.js';
 
 const FILM_CARD_COUNT_IN_EXTRA = 2;
 const SHOW_MORE_CARD_COUNT = 5;
@@ -70,24 +70,24 @@ export default class PageController {
       const filmsListContainerElement = filmsListElement.querySelector(`.films-list__container`);
       filmsListContainerElement.innerHTML = ``;
       cardsToRender.forEach(
-        (card) => {
-          const filmCardComponent = new FilmCardComponent(card);
-          const filmCardElement = filmCardComponent.getElement();
+          (card) => {
+            const filmCardComponent = new FilmCardComponent(card);
+            const filmCardElement = filmCardComponent.getElement();
 
-          const filmPopupComponent = new FilmPopupComponent(card);
+            const filmPopupComponent = new FilmPopupComponent(card);
 
-          filmCardComponent.setPosterClickHandler(handleCardClick);
-          filmCardComponent.setFilmNameClickHandler(handleCardClick);
-          filmCardComponent.setCommentsClickHandler(handleCardClick);
+            filmCardComponent.setPosterClickHandler(handleCardClick);
+            filmCardComponent.setFilmNameClickHandler(handleCardClick);
+            filmCardComponent.setCommentsClickHandler(handleCardClick);
 
-          function handleCardClick() {
-            render(filmsListContainerElement, filmPopupComponent.getElement(), RenderPosition.BEFOREEND);
-            document.addEventListener(`keydown`, onEscKeyDown);
+            function handleCardClick() {
+              render(filmsListContainerElement, filmPopupComponent.getElement(), RenderPosition.BEFOREEND);
+              document.addEventListener(`keydown`, onEscKeyDown);
 
-            filmPopupComponent.setCloseButtonClickHandler(onPopupCloseClick);
+              filmPopupComponent.setCloseButtonClickHandler(onPopupCloseClick);
+            }
+            render(filmsListContainerElement, filmCardElement, RenderPosition.BEFOREEND);
           }
-          render(filmsListContainerElement, filmCardElement, RenderPosition.BEFOREEND);
-        }
       );
     };
 
