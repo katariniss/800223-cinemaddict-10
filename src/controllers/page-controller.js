@@ -4,7 +4,7 @@ import FilmsListComponent from '../components/films-list.js';
 import FiltersComponent from '../components/filters.js';
 import SearchComponent from '../components/search.js';
 import ShowMoreButtonComponent from '../components/show-more.js';
-import SortingComponent from '../components/sorting.js';
+import SortingComponent, {SortType} from '../components/sorting.js';
 import UserTitleComponent from '../components/user-title.js';
 import NoCardsComponent from '../components/no-cards.js';
 import {render, RenderPosition} from '../utils.js';
@@ -190,5 +190,27 @@ export default class PageController {
         popup.remove();
       }
     };
+
+    let sortedCards = filteredCards;
+    sortingComponent.setSortTypeChangeHandler((sortType) => {
+
+      switch (sortType) {
+        case SortType.DATE:
+          sortedCards = filteredCards
+          .slice()
+          .sort((previous, next) => next.year - previous.year);
+          break;
+        case SortType.RATING:
+          sortedCards = filteredCards
+          .slice()
+          .sort((previous, next) => next.rating - previous.rating);
+          break;
+        case SortType.DEFAULT:
+          sortedCards = allCards;
+          break;
+      }
+
+      renderCards(filmsGeneralListElement, sortedCards);
+    });
   }
 }
