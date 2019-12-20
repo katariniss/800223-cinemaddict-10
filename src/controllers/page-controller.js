@@ -1,5 +1,3 @@
-import FilmCardComponent from '../components/card.js';
-import FilmPopupComponent from '../components/film-popup.js';
 import FilmsListComponent from '../components/films-list.js';
 import FiltersComponent from '../components/filters.js';
 import SearchComponent from '../components/search.js';
@@ -7,6 +5,8 @@ import ShowMoreButtonComponent from '../components/show-more.js';
 import SortingComponent, {SortType} from '../components/sorting.js';
 import UserTitleComponent from '../components/user-title.js';
 import NoCardsComponent from '../components/no-cards.js';
+import MovieControllerComponent from '../controllers/movie-controller.js';
+
 import {render, RenderPosition} from '../utils.js';
 
 import {generateFilters} from '../mocks/filter.js';
@@ -71,22 +71,8 @@ export default class PageController {
       filmsListContainerElement.innerHTML = ``;
       cardsToRender.forEach(
           (card) => {
-            const filmCardComponent = new FilmCardComponent(card);
-            const filmCardElement = filmCardComponent.getElement();
-
-            const filmPopupComponent = new FilmPopupComponent(card);
-
-            filmCardComponent.setPosterClickHandler(handleCardClick);
-            filmCardComponent.setFilmNameClickHandler(handleCardClick);
-            filmCardComponent.setCommentsClickHandler(handleCardClick);
-
-            function handleCardClick() {
-              render(filmsListContainerElement, filmPopupComponent.getElement(), RenderPosition.BEFOREEND);
-              document.addEventListener(`keydown`, onEscKeyDown);
-
-              filmPopupComponent.setCloseButtonClickHandler(onPopupCloseClick);
-            }
-            render(filmsListContainerElement, filmCardElement, RenderPosition.BEFOREEND);
+            const movieControllerComponent = new MovieControllerComponent(filmsListContainerElement);
+            movieControllerComponent.render(card);
           }
       );
     };
@@ -96,27 +82,6 @@ export default class PageController {
       showMoreButton.style.display = `block`;
       tryToShowMore();
       renderGeneralCards();
-    };
-
-    const onEscKeyDown = (evt) => {
-      const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-      if (isEscKey) {
-        removePopup();
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
-
-    const onPopupCloseClick = () => {
-      const closePopupButton = document.querySelector(`.film-details__close-btn`);
-      closePopupButton.removeEventListener(`click`, onPopupCloseClick);
-      removePopup();
-    };
-
-    const removePopup = () => {
-      const popup = document.querySelector(`.film-details`);
-      if (popup) {
-        popup.remove();
-      }
     };
 
     let filteredCards = allCards;
