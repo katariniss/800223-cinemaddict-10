@@ -1,15 +1,21 @@
-import {render, RenderPosition} from '../utils.js';
+import { render, RenderPosition } from '../utils.js';
 import FilmCardComponent from '../components/card.js';
 import FilmPopupComponent from '../components/film-popup.js';
+import { replace } from '../utils';
 
 export default class MovieController {
-  constructor(container) {
+  constructor(container, onDataChange) {
     this._container = container;
+    this._onDataChange = onDataChange;
+
+    this.cardComponent = null;
   }
 
   render(card) {
-    const filmCardComponent = new FilmCardComponent(card);
-    const filmCardElement = filmCardComponent.getElement();
+    const oldCardComponent = this.cardComponent;
+
+    const newFilmCardComponent = new FilmCardComponent(card);
+    const filmCardElement = newFilmCardComponent.getElement();
 
     const filmPopupComponent = new FilmPopupComponent(card);
 
@@ -20,11 +26,31 @@ export default class MovieController {
       filmPopupComponent.setCloseButtonClickHandler(onPopupCloseClick);
     };
 
-    filmCardComponent.setPosterClickHandler(handleCardClick);
-    filmCardComponent.setFilmNameClickHandler(handleCardClick);
-    filmCardComponent.setCommentsClickHandler(handleCardClick);
+    newFilmCardComponent.setPosterClickHandler(handleCardClick);
+    newFilmCardComponent.setFilmNameClickHandler(handleCardClick);
+    newFilmCardComponent.setCommentsClickHandler(handleCardClick);
 
-    render(this._container, filmCardElement, RenderPosition.BEFOREEND);
+    newFilmCardComponent.setFavoriteButtonClickHandler(() => {
+      const thisMovieController = this;
+
+      this._onDataChange(
+        thisMovieController,
+        card,
+        {
+          ...card,
+          isFavourite: !card.isFavourite
+        });
+    });
+
+    let isFirstRender = !oldCardComponent;
+
+    if (isFirstRender) {
+      render(this._container, filmCardElement, RenderPosition.BEFOREEND);
+    } else {
+      replace(newFilmCardComponent, oldCardComponent);
+    }
+
+    this.cardComponent = newFilmCardComponent;
 
     const onEscKeyDown = (evt) => {
       const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
@@ -46,6 +72,5 @@ export default class MovieController {
         popup.remove();
       }
     };
-
   }
 }

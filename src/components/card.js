@@ -26,9 +26,9 @@ const createFilmCardTemplate = ({
       <p class="film-card__description">${description}</p>
       <a class="film-card__comments">${commentsCount} comments</a>
       <form class="film-card__controls">
-        <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${toWatch ? `film-card__controls-item--active` : ``}">Add to watchlist</button>
-        <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${isWatched ? `film-card__controls-item--active` : ``}">Mark as watched</button>
-        <button class="film-card__controls-item button film-card__controls-item--favorite ${isFavourite ? `film-card__controls-item--active` : ``}">Mark as favorite</button>
+        <button type="button" class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${toWatch ? `film-card__controls-item--active` : ``}">Add to watchlist</button>
+        <button type="button" class="film-card__controls-item button film-card__controls-item--mark-as-watched ${isWatched ? `film-card__controls-item--active` : ``}">Mark as watched</button>
+        <button type="button" class="film-card__controls-item button film-card__controls-item--favorite ${isFavourite ? `film-card__controls-item--active` : ``}">Mark as favorite</button>
       </form>
     </article>`
   );
@@ -55,5 +55,10 @@ export default class Card extends AbstractComponent {
 
   setCommentsClickHandler(handler) {
     this.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, handler);
+  }
+
+  setFavoriteButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__controls-item--favorite`)
+      .addEventListener(`click`, handler);
   }
 }

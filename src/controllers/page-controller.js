@@ -20,6 +20,8 @@ export default class PageController {
   }
 
   render(allCards) {
+    this.allCards = allCards;
+
     const tryToShowMore = () => {
       const endIndex = shownCards.length + SHOW_MORE_CARD_COUNT;
 
@@ -50,7 +52,7 @@ export default class PageController {
     };
 
     const renderTopRatedCards = () => {
-      const topRatedCards = allCards.sort((a, b) => (a.rating < b.rating) ? 1 : -1);
+      const topRatedCards = this.allCards.sort((a, b) => (a.rating < b.rating) ? 1 : -1);
       const topRatedCardsElement = filmsElement.querySelector(`.films-list--top-rated`);
 
       if (topRatedCards.some((card) => card.rating > 0)) {
@@ -59,11 +61,22 @@ export default class PageController {
     };
 
     const renderMostCommentedCards = () => {
-      const mostCommentedCards = allCards.sort((a, b) => (a.commentsCount < b.commentsCount) ? 1 : -1);
+      const mostCommentedCards = this.allCards.sort((a, b) => (a.commentsCount < b.commentsCount) ? 1 : -1);
       const mostCommentedCardsElement = filmsElement.querySelector(`.films-list--most-commented`);
       if (mostCommentedCards.some((card) => card.commentsCount > 0)) {
         renderCards(mostCommentedCardsElement, mostCommentedCards.slice(0, FILM_CARD_COUNT_IN_EXTRA));
       }
+    };
+
+    const _onDataChange = (movieController, oldCard, newCard) => {
+      const oldCardIndex = this.allCards.findIndex((card) => card === oldCard);
+
+      const clonedAllCards = [...this.allCards];
+      clonedAllCards.splice(oldCardIndex, 1, newCard);
+
+      this.allCards = clonedAllCards;
+
+      movieController.render(newCard);
     };
 
     const renderCards = (filmsListElement, cardsToRender) => {
@@ -71,7 +84,7 @@ export default class PageController {
       filmsListContainerElement.innerHTML = ``;
       cardsToRender.forEach(
           (card) => {
-            const movieControllerComponent = new MovieControllerComponent(filmsListContainerElement);
+            const movieControllerComponent = new MovieControllerComponent(filmsListContainerElement, _onDataChange);
             movieControllerComponent.render(card);
           }
       );
@@ -84,7 +97,7 @@ export default class PageController {
       renderGeneralCards();
     };
 
-    let filteredCards = allCards;
+    let filteredCards = this.allCards;
     let shownCards = [];
     let sortBy = SortType.DEFAULT;
 
@@ -116,7 +129,7 @@ export default class PageController {
     const showMoreButtonComponent = new ShowMoreButtonComponent();
     render(filmsGeneralListElement, showMoreButtonComponent.getElement(), RenderPosition.BEFOREEND);
 
-    if (allCards.length > 0) {
+    if (this.allCards.length > 0) {
       renderCards(filmsGeneralListElement, shownCards);
     } else {
       render(filmsGeneralListElement, new NoCardsComponent().getElement(), RenderPosition.AFTERBEGIN);
@@ -150,12 +163,12 @@ export default class PageController {
       renderGeneralCards();
     });
 
-    if (allCards.length === 0 || allCards.length < SHOW_MORE_CARD_COUNT) {
+    if (this.allCards.length === 0 || this.allCards.length < SHOW_MORE_CARD_COUNT) {
       showMoreButton.style.display = `none`;
     }
 
     const footerStatisticElement = document.querySelector(`.footer__statistics p`);
-    footerStatisticElement.textContent = `${allCards.length} movies inside`;
+    footerStatisticElement.textContent = `${this.allCards.length} movies inside`;
 
     sortingComponent.setSortTypeChangeHandler((sortType) => {
       sortBy = sortType;
