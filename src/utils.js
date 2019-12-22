@@ -26,6 +26,20 @@ const remove = (component) => {
   component.removeElement();
 };
 
+const replace = (newComponent, oldComponent) => {
+  if (newComponent && oldComponent) {
+    const parentElement = oldComponent.getElement().parentElement;
+    const newElement = newComponent.getElement();
+    const oldElement = oldComponent.getElement();
+
+    const isExistElements = !!(parentElement && newElement && oldElement);
+
+    if (isExistElements && parentElement.contains(oldElement)) {
+      parentElement.replaceChild(newElement, oldElement);
+    }
+  }
+};
+
 const getRandomArrayItem = (array) => {
   const randomIndex = getRandomIntegerNumber(0, array.length);
 
@@ -40,4 +54,4 @@ const getRandomDecimal = (min, max) => {
   return ((max - min) * Math.random()).toFixed(1);
 };
 
-export {RenderPosition, createElement, render, remove, getRandomArrayItem, getRandomIntegerNumber, getRandomDecimal};
+export {RenderPosition, createElement, render, remove, replace, getRandomArrayItem, getRandomIntegerNumber, getRandomDecimal};
