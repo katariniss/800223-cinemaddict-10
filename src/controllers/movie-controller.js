@@ -1,7 +1,7 @@
-import { render, RenderPosition } from '../utils.js';
+import {render, RenderPosition} from '../utils.js';
 import FilmCardComponent from '../components/card.js';
 import FilmPopupComponent from '../components/film-popup.js';
-import { replace } from '../utils';
+import {replace} from '../utils';
 
 export default class MovieController {
   constructor(container, onDataChange) {
@@ -34,12 +34,33 @@ export default class MovieController {
       const thisMovieController = this;
 
       this._onDataChange(
-        thisMovieController,
-        card,
-        {
-          ...card,
-          isFavourite: !card.isFavourite
-        });
+          thisMovieController,
+          card,
+          Object.assign({}, card, {
+            isFavourite: !card.isFavourite,
+          }));
+    });
+
+    newFilmCardComponent.setToWatchButtonClickHandler(() => {
+      const thisMovieController = this;
+
+      this._onDataChange(
+          thisMovieController,
+          card,
+          Object.assign({}, card, {
+            toWatch: !card.toWatch,
+          }));
+    });
+
+    newFilmCardComponent.setAlreadyWatchedButtonClickHandler(() => {
+      const thisMovieController = this;
+
+      this._onDataChange(
+          thisMovieController,
+          card,
+          Object.assign({}, card, {
+            isWatched: !card.isWatched,
+          }));
     });
 
     let isFirstRender = !oldCardComponent;
