@@ -19,11 +19,25 @@ export default class MovieController {
 
     const filmPopupComponent = new FilmPopupComponent(card);
 
+    const handleAlreadyWatchedClick = () => {
+      const thisMovieController = this;
+
+      this._onDataChange(
+          thisMovieController,
+          card,
+          Object.assign({}, card, {
+            isWatched: !card.isWatched,
+          }));
+
+      // filmPopupComponent.rerender();
+    };
+
     const handleCardClick = () => {
       render(this._container, filmPopupComponent.getElement(), RenderPosition.BEFOREEND);
       document.addEventListener(`keydown`, onEscKeyDown);
 
       filmPopupComponent.setCloseButtonClickHandler(onPopupCloseClick);
+      filmPopupComponent.setWatchedButtonClickHandler(handleAlreadyWatchedClick);
     };
 
     newFilmCardComponent.setPosterClickHandler(handleCardClick);
@@ -52,16 +66,7 @@ export default class MovieController {
           }));
     });
 
-    newFilmCardComponent.setAlreadyWatchedButtonClickHandler(() => {
-      const thisMovieController = this;
-
-      this._onDataChange(
-          thisMovieController,
-          card,
-          Object.assign({}, card, {
-            isWatched: !card.isWatched,
-          }));
-    });
+    newFilmCardComponent.setAlreadyWatchedButtonClickHandler(handleAlreadyWatchedClick);
 
     let isFirstRender = !oldCardComponent;
 

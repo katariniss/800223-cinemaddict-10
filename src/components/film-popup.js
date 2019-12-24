@@ -1,8 +1,8 @@
-import AbstractComponent from './abstract-component.js';
+import AbstractSmartComponent from './abstract-smart-component.js';
+import UserRating from './user-rating';
 
 
-const createFilmPopupTemplate = (filmPopup) => {
-
+const createFilmPopupTemplate = (card, options) => {
   const {
     name,
     description,
@@ -19,7 +19,13 @@ const createFilmPopupTemplate = (filmPopup) => {
     writer,
     actor,
     ageRestriction,
-  } = filmPopup;
+  } = card;
+
+  const {
+    isUserRatingVisible
+  } = options;
+
+  console.log(isUserRatingVisible);
 
   return (
     `<section class="film-details">
@@ -99,6 +105,8 @@ const createFilmPopupTemplate = (filmPopup) => {
               <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
           </section>
           </div>
+
+          ${isUserRatingVisible && new UserRating().getTemplate()}
 
           <div class="form-details__bottom-container">
           <section class="film-details__comments-wrap">
@@ -195,17 +203,49 @@ const createFilmPopupTemplate = (filmPopup) => {
   );
 };
 
-export default class FilmPopup extends AbstractComponent {
-  constructor(filmPopup) {
+export default class FilmPopup extends AbstractSmartComponent {
+  constructor(card) {
     super();
-    this._filmPopup = filmPopup;
+    this._card = card;
+
+    this._isUserRatingVisible = card.isWatched;
+
+    this.recoveryListeners();
   }
 
   getTemplate() {
-    return createFilmPopupTemplate(this._filmPopup);
+    return createFilmPopupTemplate(
+        this._card,
+        {
+          isUserRatingVisible: this._isUserRatingVisible
+        });
+  }
+
+  recoveryListeners() {
+    this.getElement().querySelector(`.film-details__control-label--watched`)
+      .addEventListener(`click`, () => {
+        this._isUserRatingVisible = !this._isUserRatingVisible;
+
+        this.rerender();
+      });
   }
 
   setCloseButtonClickHandler(handler) {
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, handler);
+  }
+
+  setWatchlistButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-details__control-label--watchlist`)
+      .addEventListener(`click`, handler);
+  }
+
+  setWatchedButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-details__control-label--watched`)
+      .addEventListener(`click`, handler);
+  }
+
+  setFavoriteButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-details__control-label--favorite`)
+      .addEventListener(`click`, handler);
   }
 }
