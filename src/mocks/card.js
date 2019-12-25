@@ -117,7 +117,7 @@ const generateCard = () => {
     director: getRandomArrayItem(Directors),
     writer: getRandomArrayItem(Writers),
     actor: getRandomArrayItem(Actors),
-    ageRestriction: getRandomArrayItem(Ages)
+    ageRestriction: getRandomArrayItem(Ages),
   };
 };
 

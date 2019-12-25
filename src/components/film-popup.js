@@ -25,8 +25,6 @@ const createFilmPopupTemplate = (card, options) => {
     isUserRatingVisible
   } = options;
 
-  console.log(isUserRatingVisible);
-
   return (
     `<section class="film-details">
       <form class="film-details__inner" action="" method="get">
@@ -98,7 +96,7 @@ const createFilmPopupTemplate = (card, options) => {
               <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
               <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-              <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+              <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${card.isWatched ? `checked` : ``}>
               <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
               <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
@@ -106,7 +104,7 @@ const createFilmPopupTemplate = (card, options) => {
           </section>
           </div>
 
-          ${isUserRatingVisible && new UserRating().getTemplate()}
+          ${isUserRatingVisible ? new UserRating().getTemplate() : ``}
 
           <div class="form-details__bottom-container">
           <section class="film-details__comments-wrap">
@@ -209,6 +207,10 @@ export default class FilmPopup extends AbstractSmartComponent {
     this._card = card;
 
     this._isUserRatingVisible = card.isWatched;
+    this.closeButtonClickHandler = () => {};
+    this.watchlistButtonClickHandler = () => {};
+    this.watchedButtonClickHandler = () => {};
+    this.favouriteButtonClickHandler = () => {};
 
     this.recoveryListeners();
   }
@@ -222,30 +224,29 @@ export default class FilmPopup extends AbstractSmartComponent {
   }
 
   recoveryListeners() {
+    this.getElement().querySelector(`.film-details__close-btn`)
+      .addEventListener(`click`, (e) => this.closeButtonClickHandler(e));
+    this.getElement().querySelector(`.film-details__control-label--watchlist`)
+      .addEventListener(`click`, (e) => this.watchlistButtonClickHandler(e));
     this.getElement().querySelector(`.film-details__control-label--watched`)
-      .addEventListener(`click`, () => {
-        this._isUserRatingVisible = !this._isUserRatingVisible;
-
-        this.rerender();
-      });
+      .addEventListener(`click`, (e) => this.watchedButtonClickHandler(e));
+    this.getElement().querySelector(`.film-details__control-label--favorite`)
+      .addEventListener(`click`, (e) => this.favoriteButtonClickHandler(e));
   }
 
   setCloseButtonClickHandler(handler) {
-    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, handler);
+    this.closeButtonClickHandler = handler;
   }
 
   setWatchlistButtonClickHandler(handler) {
-    this.getElement().querySelector(`.film-details__control-label--watchlist`)
-      .addEventListener(`click`, handler);
+    this.watchedButtonClickHandler = handler;
   }
 
   setWatchedButtonClickHandler(handler) {
-    this.getElement().querySelector(`.film-details__control-label--watched`)
-      .addEventListener(`click`, handler);
+    this.watchedButtonClickHandler = handler;
   }
 
   setFavoriteButtonClickHandler(handler) {
-    this.getElement().querySelector(`.film-details__control-label--favorite`)
-      .addEventListener(`click`, handler);
+    this.favouriteButtonClickHandler = handler;
   }
 }

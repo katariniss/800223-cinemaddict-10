@@ -5,7 +5,7 @@ import ShowMoreButtonComponent from '../components/show-more.js';
 import SortingComponent, {SortType} from '../components/sorting.js';
 import UserTitleComponent from '../components/user-title.js';
 import NoCardsComponent from '../components/no-cards.js';
-import MovieControllerComponent from '../controllers/movie-controller.js';
+import MovieController from '../controllers/movie-controller.js';
 
 import {render, RenderPosition} from '../utils.js';
 
@@ -84,7 +84,7 @@ export default class PageController {
       filmsListContainerElement.innerHTML = ``;
       cardsToRender.forEach(
           (card) => {
-            const movieControllerComponent = new MovieControllerComponent(filmsListContainerElement, _onDataChange);
+            const movieControllerComponent = new MovieController(filmsListContainerElement, _onDataChange);
             movieControllerComponent.render(card);
           }
       );

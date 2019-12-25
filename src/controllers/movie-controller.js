@@ -1,13 +1,13 @@
-import {render, RenderPosition} from '../utils.js';
+import {render, RenderPosition, replace, remove} from '../utils.js';
 import FilmCardComponent from '../components/card.js';
 import FilmPopupComponent from '../components/film-popup.js';
-import {replace} from '../utils';
 
 export default class MovieController {
   constructor(container, onDataChange) {
     this._container = container;
     this._onDataChange = onDataChange;
-
+    this.isPopupOpen = false;
+    this.filmPopupComponent = null;
     this.cardComponent = null;
   }
 
@@ -16,8 +16,6 @@ export default class MovieController {
 
     const newFilmCardComponent = new FilmCardComponent(card);
     const filmCardElement = newFilmCardComponent.getElement();
-
-    const filmPopupComponent = new FilmPopupComponent(card);
 
     const handleAlreadyWatchedClick = () => {
       const thisMovieController = this;
@@ -28,16 +26,27 @@ export default class MovieController {
           Object.assign({}, card, {
             isWatched: !card.isWatched,
           }));
-
-      // filmPopupComponent.rerender();
     };
 
+    const onPopupCloseClick = () => {
+      const closePopupButton = this._container.querySelector(`.film-details__close-btn`);
+      closePopupButton.removeEventListener(`click`, onPopupCloseClick);
+      removePopup();
+    };
+    if (this.isPopupOpen) {
+      if (this.filmPopupComponent) {
+        remove(this.filmPopupComponent);
+      }
+      this.filmPopupComponent = new FilmPopupComponent(card);
+      render(this._container, this.filmPopupComponent.getElement(), RenderPosition.BEFOREEND);
+      this.filmPopupComponent.setCloseButtonClickHandler(onPopupCloseClick);
+      this.filmPopupComponent.setWatchedButtonClickHandler(handleAlreadyWatchedClick);
+    }
     const handleCardClick = () => {
-      render(this._container, filmPopupComponent.getElement(), RenderPosition.BEFOREEND);
       document.addEventListener(`keydown`, onEscKeyDown);
 
-      filmPopupComponent.setCloseButtonClickHandler(onPopupCloseClick);
-      filmPopupComponent.setWatchedButtonClickHandler(handleAlreadyWatchedClick);
+      this.isPopupOpen = true;
+      this.render(card);
     };
 
     newFilmCardComponent.setPosterClickHandler(handleCardClick);
@@ -86,13 +95,8 @@ export default class MovieController {
       }
     };
 
-    const onPopupCloseClick = () => {
-      const closePopupButton = this._container.querySelector(`.film-details__close-btn`);
-      closePopupButton.removeEventListener(`click`, onPopupCloseClick);
-      removePopup();
-    };
-
     const removePopup = () => {
+      this.isPopupOpen = false;
       const popup = this._container.querySelector(`.film-details`);
       if (popup) {
         popup.remove();
