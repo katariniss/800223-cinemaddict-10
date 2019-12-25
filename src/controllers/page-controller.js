@@ -84,8 +84,12 @@ export default class PageController {
       filmsListContainerElement.innerHTML = ``;
       cardsToRender.forEach(
           (card) => {
-            const movieControllerComponent = new MovieController(filmsListContainerElement, _onDataChange);
+            const movieControllerComponent = new MovieController(filmsListContainerElement, _onDataChange, this._onViewChange);
             movieControllerComponent.render(card);
+
+            this._onViewChange = () => {
+              movieControllerComponent.setDefaultView();
+            };
           }
       );
     };

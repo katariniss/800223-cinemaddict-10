@@ -3,12 +3,13 @@ import FilmCardComponent from '../components/card.js';
 import FilmPopupComponent from '../components/film-popup.js';
 
 export default class MovieController {
-  constructor(container, onDataChange) {
+  constructor(container, onDataChange, onViewChange) {
     this._container = container;
     this._onDataChange = onDataChange;
     this.isPopupOpen = false;
     this.filmPopupComponent = null;
     this.cardComponent = null;
+    this.onViewChange = onViewChange;
   }
 
   render(card) {
@@ -42,7 +43,9 @@ export default class MovieController {
       this.filmPopupComponent.setCloseButtonClickHandler(onPopupCloseClick);
       this.filmPopupComponent.setWatchedButtonClickHandler(handleAlreadyWatchedClick);
     }
+
     const handleCardClick = () => {
+      this.onViewChange();
       document.addEventListener(`keydown`, onEscKeyDown);
 
       this.isPopupOpen = true;
@@ -86,6 +89,12 @@ export default class MovieController {
     }
 
     this.cardComponent = newFilmCardComponent;
+
+    const setDefaultView = () => {
+      if (this.isPopupOpen) {
+        removePopup();
+      }
+    };
 
     const onEscKeyDown = (evt) => {
       const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
