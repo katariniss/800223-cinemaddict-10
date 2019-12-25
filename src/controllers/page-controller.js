@@ -17,6 +17,24 @@ const SHOW_MORE_CARD_COUNT = 5;
 export default class PageController {
   constructor(container) {
     this._container = container;
+    this._movieControllers = [];
+    this._onViewChange = this._onViewChange.bind(this);
+    this._onDataChange = this._onDataChange.bind(this);
+  }
+
+  _onViewChange() {
+    this._movieControllers.forEach((movieController) => movieController.setDefaultView());
+  }
+
+  _onDataChange(movieController, oldCard, newCard) {
+    const oldCardIndex = this.allCards.findIndex((card) => card === oldCard);
+
+    const clonedAllCards = [...this.allCards];
+    clonedAllCards.splice(oldCardIndex, 1, newCard);
+
+    this.allCards = clonedAllCards;
+
+    movieController.render(newCard);
   }
 
   render(allCards) {
@@ -68,28 +86,19 @@ export default class PageController {
       }
     };
 
-    const _onDataChange = (movieController, oldCard, newCard) => {
-      const oldCardIndex = this.allCards.findIndex((card) => card === oldCard);
-
-      const clonedAllCards = [...this.allCards];
-      clonedAllCards.splice(oldCardIndex, 1, newCard);
-
-      this.allCards = clonedAllCards;
-
-      movieController.render(newCard);
-    };
-
     const renderCards = (filmsListElement, cardsToRender) => {
       const filmsListContainerElement = filmsListElement.querySelector(`.films-list__container`);
       filmsListContainerElement.innerHTML = ``;
       cardsToRender.forEach(
           (card) => {
-            const movieControllerComponent = new MovieController(filmsListContainerElement, _onDataChange, this._onViewChange);
+            const movieControllerComponent = new MovieController(
+                filmsListContainerElement,
+                this._onDataChange,
+                this._onViewChange
+            );
             movieControllerComponent.render(card);
 
-            this._onViewChange = () => {
-              movieControllerComponent.setDefaultView();
-            };
+            this._movieControllers.push(movieControllerComponent);
           }
       );
     };

@@ -12,6 +12,12 @@ export default class MovieController {
     this.onViewChange = onViewChange;
   }
 
+  setDefaultView() {
+    if (this.isPopupOpen) {
+      this.removePopup();
+    }
+  }
+
   render(card) {
     const oldCardComponent = this.cardComponent;
 
@@ -32,7 +38,7 @@ export default class MovieController {
     const onPopupCloseClick = () => {
       const closePopupButton = this._container.querySelector(`.film-details__close-btn`);
       closePopupButton.removeEventListener(`click`, onPopupCloseClick);
-      removePopup();
+      this.removePopup();
     };
     if (this.isPopupOpen) {
       if (this.filmPopupComponent) {
@@ -90,26 +96,20 @@ export default class MovieController {
 
     this.cardComponent = newFilmCardComponent;
 
-    const setDefaultView = () => {
-      if (this.isPopupOpen) {
-        removePopup();
-      }
-    };
-
     const onEscKeyDown = (evt) => {
       const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
       if (isEscKey) {
-        removePopup();
+        this.removePopup();
         document.removeEventListener(`keydown`, onEscKeyDown);
       }
     };
+  }
 
-    const removePopup = () => {
-      this.isPopupOpen = false;
-      const popup = this._container.querySelector(`.film-details`);
-      if (popup) {
-        popup.remove();
-      }
-    };
+  removePopup() {
+    this.isPopupOpen = false;
+    const popup = this._container.querySelector(`.film-details`);
+    if (popup) {
+      popup.remove();
+    }
   }
 }
