@@ -69,7 +69,7 @@ export default class MovieController {
           thisMovieController,
           card,
           Object.assign({}, card, {
-            isFavourite: !card.isFavourite,
+            isFavorite: !card.isFavorite,
           }));
     });
 

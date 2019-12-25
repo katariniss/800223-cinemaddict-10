@@ -10,7 +10,7 @@ const createFilmCardTemplate = ({
   poster,
   toWatch,
   isWatched,
-  isFavourite,
+  isFavorite,
   commentsCount
 }) => {
   return (
@@ -28,7 +28,7 @@ const createFilmCardTemplate = ({
       <form class="film-card__controls">
         <button type="button" class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${toWatch ? `film-card__controls-item--active` : ``}">Add to watchlist</button>
         <button type="button" class="film-card__controls-item button film-card__controls-item--mark-as-watched ${isWatched ? `film-card__controls-item--active` : ``}">Mark as watched</button>
-        <button type="button" class="film-card__controls-item button film-card__controls-item--favorite ${isFavourite ? `film-card__controls-item--active` : ``}">Mark as favorite</button>
+        <button type="button" class="film-card__controls-item button film-card__controls-item--favorite ${isFavorite ? `film-card__controls-item--active` : ``}">Mark as favorite</button>
       </form>
     </article>`
   );

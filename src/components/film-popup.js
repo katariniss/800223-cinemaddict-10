@@ -210,7 +210,7 @@ export default class FilmPopup extends AbstractSmartComponent {
     this.closeButtonClickHandler = () => {};
     this.watchlistButtonClickHandler = () => {};
     this.watchedButtonClickHandler = () => {};
-    this.favouriteButtonClickHandler = () => {};
+    this.favoriteButtonClickHandler = () => {};
 
     this.recoveryListeners();
   }
@@ -247,6 +247,6 @@ export default class FilmPopup extends AbstractSmartComponent {
   }
 
   setFavoriteButtonClickHandler(handler) {
-    this.favouriteButtonClickHandler = handler;
+    this.favoriteButtonClickHandler = handler;
   }
 }

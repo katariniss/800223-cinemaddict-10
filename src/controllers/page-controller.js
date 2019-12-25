@@ -163,7 +163,7 @@ export default class PageController {
     });
 
     favorites.addEventListener(`click`, function () {
-      filteredCards = allCards.filter((card) => card.isFavourite);
+      filteredCards = allCards.filter((card) => card.isFavorite);
       handleNewFilteredCards();
     });
 
