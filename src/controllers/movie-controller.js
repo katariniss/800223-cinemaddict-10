@@ -35,6 +35,28 @@ export default class MovieController {
           }));
     };
 
+    const handleFavoriteClick = () => {
+      const thisMovieController = this;
+
+      this._onDataChange(
+          thisMovieController,
+          card,
+          Object.assign({}, card, {
+            isFavorite: !card.isFavorite,
+          }));
+    };
+
+    const handleWatchlistClick = () => {
+      const thisMovieController = this;
+
+      this._onDataChange(
+          thisMovieController,
+          card,
+          Object.assign({}, card, {
+            toWatch: !card.toWatch,
+          }));
+    };
+
     const onPopupCloseClick = () => {
       const closePopupButton = this._container.querySelector(`.film-details__close-btn`);
       closePopupButton.removeEventListener(`click`, onPopupCloseClick);
@@ -48,6 +70,8 @@ export default class MovieController {
       render(this._container, this.filmPopupComponent.getElement(), RenderPosition.BEFOREEND);
       this.filmPopupComponent.setCloseButtonClickHandler(onPopupCloseClick);
       this.filmPopupComponent.setWatchedButtonClickHandler(handleAlreadyWatchedClick);
+      this.filmPopupComponent.setFavoriteButtonClickHandler(handleFavoriteClick);
+      this.filmPopupComponent.setWatchlistButtonClickHandler(handleWatchlistClick);
     }
 
     const handleCardClick = () => {
