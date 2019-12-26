@@ -7,7 +7,7 @@ const createFilmPopupTemplate = (card, options) => {
     name,
     description,
     poster,
-    genre,
+    genres,
     totalDuration,
     year,
     rating,
@@ -77,11 +77,9 @@ const createFilmPopupTemplate = (card, options) => {
                   <td class="film-details__cell">${country}</td>
                   </tr>
                   <tr class="film-details__row">
-                  <td class="film-details__term">Genres</td>
+                  <td class="film-details__term">${card.genres.length > 1 ? `Genres` : `Genre`}</td>
                   <td class="film-details__cell">
-                      <span class="film-details__genre">${genre}</span>
-                      <span class="film-details__genre">${genre}</span>
-                      <span class="film-details__genre">${genre}</span>
+                      <span class="film-details__genre">${genres.join(`, `)}</span>
                   </td>
                   </tr>
               </table>

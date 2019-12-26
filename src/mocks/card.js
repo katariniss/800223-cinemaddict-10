@@ -59,6 +59,7 @@ const Countries = [`USA`,
   `Australia`,
   `Germany`,
 ];
+
 const Months = [`January`,
   `February`,
   `March`,
@@ -72,11 +73,20 @@ const Months = [`January`,
   `November`,
   `December`,
 ];
+
 const Directors = [`Anthony Mann`, `Stephen Spielberg`, `Martin Scorcese`, `Quentin Tarantino`];
 const Writers = [`Anne Wigton`, ` Heinz Herald`, `Richard Weil`];
 const Actors = [`Leonardo DiCaprio`, `Brad Pitt`, `Steve Carell`, `John Krasinski`];
 const Ages = [6, 12, 16, 18];
 
+const generateGenre = () => {
+  const genres = FilmsGenres
+  .slice()
+  .filter(() => Math.random() > 0.5)
+  .sort(() => (Math.random() - 0.5));
+
+  return genres.length ? genres : [FilmsGenres[getRandomIntegerNumber(0, FilmsGenres.length - 1)]];
+};
 
 const generateCards = (count) => {
   return [...new Array(count)]
@@ -104,7 +114,7 @@ const generateCard = () => {
     durationInHours: DurationInHours,
     durationInMinutes: DurationInMinutes,
     totalDuration: `${DurationInHours}h ${DurationInMinutes}m`,
-    genre: getRandomArrayItem(FilmsGenres),
+    genres: generateGenre(),
     poster: getRandomArrayItem(FilmsPosters),
     toWatch: Math.random() > 0.5,
     isWatched: Math.random() > 0.5,
