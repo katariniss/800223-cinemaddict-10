@@ -1,6 +1,8 @@
 import AbstractSmartComponent from './abstract-smart-component.js';
 import UserRating from './user-rating';
+import {getFilmDuration} from '../mocks/card';
 
+import moment from "moment";
 
 const createFilmPopupTemplate = (card, options) => {
   const {
@@ -8,18 +10,27 @@ const createFilmPopupTemplate = (card, options) => {
     description,
     poster,
     genres,
-    totalDuration,
-    year,
     rating,
     subtitle,
     country,
-    month,
-    releaseDay,
+    releaseDate,
+    runTime,
     director,
     writer,
     actor,
     ageRestriction,
+    commentDate
   } = card;
+
+  const getReleaseDate = () => moment(releaseDate).format(`DD MMMM YYYY`);
+
+  const formatDate = (date) => {
+    const today = moment(new Date());
+    if (today.diff(date, `week`) >= 1) {
+      return moment(date).format(`YYYY/MM/DD hh:mm`);
+    }
+    return moment(date).fromNow();
+  };
 
   const {
     isUserRatingVisible
@@ -66,11 +77,11 @@ const createFilmPopupTemplate = (card, options) => {
                   </tr>
                   <tr class="film-details__row">
                   <td class="film-details__term">Release Date</td>
-                  <td class="film-details__cell">${releaseDay} ${month} ${year}</td>
+                  <td class="film-details__cell">${getReleaseDate()}</td>
                   </tr>
                   <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>
-                  <td class="film-details__cell">${totalDuration}</td>
+                  <td class="film-details__cell">${getFilmDuration(runTime)}</td>
                   </tr>
                   <tr class="film-details__row">
                   <td class="film-details__term">Country</td>
@@ -117,7 +128,7 @@ const createFilmPopupTemplate = (card, options) => {
                   <p class="film-details__comment-text">Interesting setting and a good cast</p>
                   <p class="film-details__comment-info">
                       <span class="film-details__comment-author">Tim Macoveev</span>
-                      <span class="film-details__comment-day">2019/12/31 23:59</span>
+                      <span class="film-details__comment-day">${formatDate(commentDate)}</span>
                       <button class="film-details__comment-delete">Delete</button>
                   </p>
                   </div>
