@@ -1,4 +1,5 @@
 import {getRandomArrayItem, getRandomIntegerNumber, getRandomDecimal} from '../utils.js';
+import moment from 'moment';
 
 const FilmsList = [
   `Matrix`,
@@ -44,6 +45,12 @@ const FilmsGenres = [
   `action`
 ];
 
+const releaseDate = new Date(new Date().setDate(new Date().getDate() - Math.floor(Math.random() * 10000))
+);
+
+const minsToMilliseconds = (minutes) => minutes * 60 * 1000;
+const runTime = getRandomIntegerNumber(minsToMilliseconds(120), minsToMilliseconds(60));
+
 const FilmsPosters = [
   `made-for-each-other.png`,
   `popeye-meets-sinbad.png`,
@@ -60,20 +67,6 @@ const Countries = [`USA`,
   `Germany`,
 ];
 
-const Months = [`January`,
-  `February`,
-  `March`,
-  `April`,
-  `May`,
-  `June`,
-  `July`,
-  `August`,
-  `September`,
-  `October`,
-  `November`,
-  `December`,
-];
-
 const Directors = [`Anthony Mann`, `Stephen Spielberg`, `Martin Scorcese`, `Quentin Tarantino`];
 const Writers = [`Anne Wigton`, ` Heinz Herald`, `Richard Weil`];
 const Actors = [`Leonardo DiCaprio`, `Brad Pitt`, `Steve Carell`, `John Krasinski`];
@@ -88,13 +81,15 @@ const generateGenre = () => {
   return genres.length ? genres : [FilmsGenres[getRandomIntegerNumber(0, FilmsGenres.length - 1)]];
 };
 
+const getFilmDuration = (filmDuration) => {
+  const momentDuration = moment.duration(filmDuration);
+  return `${momentDuration.hours()}h ${momentDuration.minutes()}m`;
+};
+
 const generateCards = (count) => {
   return [...new Array(count)]
     .map(generateCard);
 };
-
-const MAX_DURATION_IN_HOURS = 2;
-const MAX_DURATION_IN_MINUTES = 55;
 
 const MIN_YEAR = 1980;
 const MAX_YEAR = 2020;
@@ -103,17 +98,12 @@ const MIN_RATING = 0;
 const MAX_RATING = 10;
 
 const generateCard = () => {
-  const DurationInHours = getRandomIntegerNumber(1, MAX_DURATION_IN_HOURS);
-  const DurationInMinutes = getRandomIntegerNumber(0, MAX_DURATION_IN_MINUTES);
 
   return {
     name: getRandomArrayItem(FilmsList),
     description: getRandomArrayItem(DescriptionItems) + getRandomArrayItem(DescriptionItems),
     rating: getRandomDecimal(MIN_RATING, MAX_RATING),
     year: getRandomIntegerNumber(MIN_YEAR, (MAX_YEAR - MIN_YEAR)),
-    durationInHours: DurationInHours,
-    durationInMinutes: DurationInMinutes,
-    totalDuration: `${DurationInHours}h ${DurationInMinutes}m`,
     genres: generateGenre(),
     poster: getRandomArrayItem(FilmsPosters),
     toWatch: Math.random() > 0.5,
@@ -122,13 +112,15 @@ const generateCard = () => {
     commentsCount: getRandomIntegerNumber(0, 20),
     subtitle: getRandomArrayItem(FilmsList),
     country: getRandomArrayItem(Countries),
-    month: getRandomArrayItem(Months),
     releaseDay: getRandomIntegerNumber(0, 30),
+    releaseDate,
+    runTime,
     director: getRandomArrayItem(Directors),
     writer: getRandomArrayItem(Writers),
     actor: getRandomArrayItem(Actors),
     ageRestriction: getRandomArrayItem(Ages),
+    commentDate: `12.01.2019`
   };
 };
 
-export {generateCard, generateCards};
+export {generateCard, generateCards, getFilmDuration};

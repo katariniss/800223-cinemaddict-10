@@ -1,17 +1,18 @@
 import AbstractComponent from './abstract-component.js';
+import {getFilmDuration} from '../mocks/card';
 
 const createFilmCardTemplate = ({
   name,
   description,
   rating,
   year,
-  totalDuration,
   genres,
   poster,
   toWatch,
   isWatched,
   isFavorite,
-  commentsCount
+  commentsCount,
+  runTime
 }) => {
   return (
     `<article class="film-card">
@@ -19,7 +20,7 @@ const createFilmCardTemplate = ({
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
         <span class="film-card__year">${year}</span>
-        <span class="film-card__duration">${totalDuration}</span>
+        <span class="film-card__duration">${getFilmDuration(runTime)}</span>
         <span class="film-card__genre">${genres.join(`, `)}</span>
       </p>
       <img src="./images/posters/${poster}" alt="" class="film-card__poster">
