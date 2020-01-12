@@ -100,6 +100,7 @@ const MAX_RATING = 10;
 const generateCard = () => {
 
   return {
+    id: String(new Date() + Math.random()),
     name: getRandomArrayItem(FilmsList),
     description: getRandomArrayItem(DescriptionItems) + getRandomArrayItem(DescriptionItems),
     rating: getRandomDecimal(MIN_RATING, MAX_RATING),
