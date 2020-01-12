@@ -1,19 +1,38 @@
+import {getCardsByFilter} from '../filter-utils.js';
+import {FilterType} from '../const.js';
+
 export default class Movies {
   constructor() {
-    this._cards = [];
+    this._allCards = [];
+    this._activeFilterType = FilterType.ALL;
+
+    this._filterChangeHandlers = [];
   }
 
   getCards() {
-    return this._cards;
+    return getCardsByFilter(this._allCards, this._activeFilterType);
+  }
+
+  getAllCards() {
+    return this._allCards;
   }
 
   setCards(cards) {
-    this._cards = Array.from(cards);
+    this._allCards = Array.from(cards);
   }
 
   updateCard(id, card) {
-    const index = this._cards.findIndex((it) => it.id === id);
+    const index = this._allCards.findIndex((it) => it.id === id);
 
-    this._cards = [].concat(this._cards.slice(0, index), card, this._cards.slice(index + 1));
+    this._allCards = [].concat(this._allCards.slice(0, index), card, this._allCards.slice(index + 1));
+  }
+
+  setFilter(filterType) {
+    this._activeFilterType = filterType;
+    this._filterChangeHandlers.forEach((handler) => handler());
+  }
+
+  setFilterChangeHandler(handler) {
+    this._filterChangeHandlers.push(handler);
   }
 }
