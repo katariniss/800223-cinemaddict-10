@@ -1,5 +1,4 @@
 import FilmsListComponent from '../components/films-list.js';
-import FiltersComponent from '../components/filters.js';
 import SearchComponent from '../components/search.js';
 import ShowMoreButtonComponent from '../components/show-more.js';
 import SortingComponent, {SortType} from '../components/sorting.js';
@@ -8,8 +7,6 @@ import NoCardsComponent from '../components/no-cards.js';
 import MovieController from '../controllers/movie-controller.js';
 
 import {render, RenderPosition} from '../utils.js';
-
-import {generateFilters} from '../mocks/filter.js';
 
 const FILM_CARD_COUNT_IN_EXTRA = 2;
 const SHOW_MORE_CARD_COUNT = 5;
@@ -112,9 +109,6 @@ export default class PageController {
 
     const filmsComponent = new FilmsListComponent();
     render(this._container, filmsComponent, RenderPosition.BEFOREEND);
-
-    const siteMenuComponent = new FiltersComponent(generateFilters());
-    render(this._container, siteMenuComponent.getElement(), RenderPosition.BEFOREEND);
 
     const sortingComponent = new SortingComponent();
     render(this._container, sortingComponent.getElement(), RenderPosition.BEFOREEND);
