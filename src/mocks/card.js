@@ -72,6 +72,41 @@ const Writers = [`Anne Wigton`, ` Heinz Herald`, `Richard Weil`];
 const Actors = [`Leonardo DiCaprio`, `Brad Pitt`, `Steve Carell`, `John Krasinski`];
 const Ages = [6, 12, 16, 18];
 
+const FILM_COMMENTS_MIN = 2;
+const FILM_COMMENTS_MAX = 10;
+
+const COMMENTS_EMOJIES = [
+  `./images/emoji/smile.png`,
+  `./images/emoji/puke.png`,
+  `./images/emoji/sleeping.png`,
+  `./images/emoji/angry.png`
+];
+
+const COMMENTS_MESSAGES = [
+  `Interesting setting and a good cast`,
+  `Booooooooooring`,
+  `Almost two hours? Seriously?`,
+  `Very very old. Meh`
+];
+
+const COMMENTS_AUTHORS = [
+  `Tim Macoveev`,
+  `John Doe`
+];
+
+const generateFilmComments = () => {
+  return new Array(getRandomIntegerNumber(FILM_COMMENTS_MIN, FILM_COMMENTS_MAX))
+    .fill(``)
+    .map(() => {
+      return {
+        emoji: getRandomArrayItem(COMMENTS_EMOJIES),
+        text: getRandomArrayItem(COMMENTS_MESSAGES),
+        author: getRandomArrayItem(COMMENTS_AUTHORS),
+        date: releaseDate
+      };
+    });
+};
+
 const generateGenre = () => {
   const genres = FilmsGenres
   .slice()
@@ -98,6 +133,7 @@ const MIN_RATING = 0;
 const MAX_RATING = 10;
 
 const generateCard = () => {
+  const commentsArray = generateFilmComments();
 
   return {
     id: String(new Date() + Math.random()),
@@ -120,7 +156,7 @@ const generateCard = () => {
     writer: getRandomArrayItem(Writers),
     actor: getRandomArrayItem(Actors),
     ageRestriction: getRandomArrayItem(Ages),
-    commentDate: `12.01.2019`
+    comments: commentsArray
   };
 };
 
