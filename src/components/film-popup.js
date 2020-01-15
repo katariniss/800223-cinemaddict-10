@@ -6,6 +6,7 @@ import moment from "moment";
 
 const createFilmPopupTemplate = (card, options) => {
   const {
+    id,
     name,
     description,
     poster,
@@ -43,7 +44,7 @@ const createFilmPopupTemplate = (card, options) => {
             <p class="film-details__comment-info">
               <span class="film-details__comment-author">${it.author}</span>
               <span class="film-details__comment-day">${formatDate(it.date)}</span>
-              <button class="film-details__comment-delete">Delete</button>
+              <button class="film-details__comment-delete" data-film-id="${id}" data-comment-id="${it.id}">Delete</button>
             </p>
           </div>
         </li>`
@@ -54,8 +55,6 @@ const createFilmPopupTemplate = (card, options) => {
 
   const commentsTemplate = createCommentMarkup(comments);
   const getReleaseDate = () => moment(releaseDate).format(`DD MMMM YYYY`);
-
-
 
   const {
     isUserRatingVisible
@@ -142,7 +141,7 @@ const createFilmPopupTemplate = (card, options) => {
 
           <div class="form-details__bottom-container">
           <section class="film-details__comments-wrap">
-              <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">4</span></h3>
+              <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
               <ul class="film-details__comments-list">
                 ${commentsTemplate}
@@ -194,6 +193,7 @@ export default class FilmPopup extends AbstractSmartComponent {
     this.watchlistButtonClickHandler = () => {};
     this.watchedButtonClickHandler = () => {};
     this.favoriteButtonClickHandler = () => {};
+    this.deleteButtonClickHandler = () => {};
 
     this.recoveryListeners();
   }
@@ -215,6 +215,16 @@ export default class FilmPopup extends AbstractSmartComponent {
       .addEventListener(`click`, (e) => this.watchedButtonClickHandler(e));
     this.getElement().querySelector(`.film-details__control-label--favorite`)
       .addEventListener(`click`, (e) => this.favoriteButtonClickHandler(e));
+
+    const deleteButtons = this.getElement().querySelectorAll(`.film-details__comment-delete`);
+    [...deleteButtons].forEach((button) => {
+      button.addEventListener(`click`, (e) => {
+        const filmId = e.target.attributes[`data-film-id`].value;
+        const commentId = e.target.attributes[`data-comment-id`].value;
+
+        this.deleteButtonClickHandler(filmId, commentId);
+      });
+    });
   }
 
   setCloseButtonClickHandler(handler) {
@@ -231,5 +241,9 @@ export default class FilmPopup extends AbstractSmartComponent {
 
   setFavoriteButtonClickHandler(handler) {
     this.favoriteButtonClickHandler = handler;
+  }
+
+  setDeleteButtonClickHandler(handler) {
+    this.deleteButtonClickHandler = handler;
   }
 }

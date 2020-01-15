@@ -99,6 +99,7 @@ const generateFilmComments = () => {
     .fill(``)
     .map(() => {
       return {
+        id: String(new Date() + Math.random()),
         emoji: getRandomArrayItem(COMMENTS_EMOJIES),
         text: getRandomArrayItem(COMMENTS_MESSAGES),
         author: getRandomArrayItem(COMMENTS_AUTHORS),
