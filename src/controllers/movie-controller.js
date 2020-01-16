@@ -72,6 +72,21 @@ export default class MovieController {
           }));
     };
 
+
+    const onAddComment = (newComment) => {
+      const thisMovieController = this;
+
+      const newComments = Array.from(card.comments);
+      newComments.unshift(newComment);
+
+      this._onDataChange(
+          thisMovieController,
+          card,
+          Object.assign({}, card, {
+            comments: newComments
+          }));
+    };
+
     const onPopupCloseClick = () => {
       const closePopupButton = this._container.querySelector(`.film-details__close-btn`);
       closePopupButton.removeEventListener(`click`, onPopupCloseClick);
@@ -89,6 +104,7 @@ export default class MovieController {
       this.filmPopupComponent.setWatchlistButtonClickHandler(handleWatchlistClick);
 
       this.filmPopupComponent.setDeleteButtonClickHandler(onCommentDeleteButtonClick);
+      this.filmPopupComponent.setAddCommentHandler(onAddComment);
     }
 
     const handleCardClick = () => {

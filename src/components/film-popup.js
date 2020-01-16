@@ -1,6 +1,7 @@
 import AbstractSmartComponent from './abstract-smart-component.js';
 import UserRating from './user-rating';
 import {getFilmDuration} from '../mocks/card';
+import {formatDate} from '../utils.js';
 
 import moment from "moment";
 
@@ -23,28 +24,20 @@ const createFilmPopupTemplate = (card, options) => {
     comments
   } = card;
 
-  const formatDate = (date) => {
-    const today = moment(new Date());
-    if (today.diff(date, `week`) >= 1) {
-      return moment(date).format(`YYYY/MM/DD hh:mm`);
-    }
-    return moment(date).fromNow();
-  };
-
   const createCommentMarkup = () => {
-    return comments.map((it) => {
+    return comments.map((comment) => {
 
       return (
         `<li class="film-details__comment">
           <span class="film-details__comment-emoji">
-            <img src="${it.emoji}" width="55" height="55" alt="emoji">
+            <img src="${comment.emoji}" width="55" height="55" alt="emoji">
           </span>
           <div>
-            <p class="film-details__comment-text">${it.text}</p>
+            <p class="film-details__comment-text">${comment.text}</p>
             <p class="film-details__comment-info">
-              <span class="film-details__comment-author">${it.author}</span>
-              <span class="film-details__comment-day">${formatDate(it.date)}</span>
-              <button class="film-details__comment-delete" data-film-id="${id}" data-comment-id="${it.id}">Delete</button>
+              <span class="film-details__comment-author">${comment.author}</span>
+              <span class="film-details__comment-day">${formatDate(comment.date)}</span>
+              <button class="film-details__comment-delete" data-film-id="${id}" data-comment-id="${comment.id}">Delete</button>
             </p>
           </div>
         </li>`
@@ -187,6 +180,7 @@ export default class FilmPopup extends AbstractSmartComponent {
   constructor(card) {
     super();
     this._card = card;
+    this._emojiSelected = null;
 
     this._isUserRatingVisible = card.isWatched;
     this.closeButtonClickHandler = () => {};
@@ -194,6 +188,7 @@ export default class FilmPopup extends AbstractSmartComponent {
     this.watchedButtonClickHandler = () => {};
     this.favoriteButtonClickHandler = () => {};
     this.deleteButtonClickHandler = () => {};
+    this.addCommentHandler = () => {};
 
     this.recoveryListeners();
   }
@@ -225,6 +220,35 @@ export default class FilmPopup extends AbstractSmartComponent {
         this.deleteButtonClickHandler(filmId, commentId);
       });
     });
+
+
+    this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`change`, (e) => {
+      if (e.target.classList.contains(`film-details__emoji-item`) && e.target.checked) {
+        const cloneImgElement = e.target.nextElementSibling.querySelector(`img`).cloneNode();
+        const targetElement = this.getElement().querySelector(`.film-details__add-emoji-label`);
+        targetElement.innerHTML = ``;
+        targetElement.appendChild(cloneImgElement);
+
+        const imgTargetElement = this.getElement().querySelector(`.film-details__emoji-label[for=${e.target.id}] img`);
+        this._emojiSelected = imgTargetElement.getAttribute(`src`);
+      }
+    });
+
+    const newCommentInput = this.getElement().querySelector(`.film-details__comment-input`);
+    newCommentInput.addEventListener(`keydown`, (e) => {
+      if (e.key === `Enter` && e.metaKey && newCommentInput.value && this._emojiSelected) {
+
+        const newCommentMessage = newCommentInput.value;
+        const newComment = {
+          id: String(new Date() + Math.random()),
+          emoji: this._emojiSelected,
+          text: newCommentMessage,
+          date: new Date()
+        };
+
+        this.addCommentHandler(newComment);
+      }
+    });
   }
 
   setCloseButtonClickHandler(handler) {
@@ -245,5 +269,9 @@ export default class FilmPopup extends AbstractSmartComponent {
 
   setDeleteButtonClickHandler(handler) {
     this.deleteButtonClickHandler = handler;
+  }
+
+  setAddCommentHandler(handler) {
+    this.addCommentHandler = handler;
   }
 }

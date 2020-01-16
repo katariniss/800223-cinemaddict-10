@@ -1,3 +1,5 @@
+import moment from "moment";
+
 const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`
@@ -54,4 +56,13 @@ const getRandomDecimal = (min, max) => {
   return ((max - min) * Math.random()).toFixed(1);
 };
 
-export {RenderPosition, createElement, render, remove, replace, getRandomArrayItem, getRandomIntegerNumber, getRandomDecimal};
+
+const formatDate = (date) => {
+  const today = moment(new Date());
+  if (today.diff(date, `week`) >= 1) {
+    return moment(date).format(`YYYY/MM/DD hh:mm`);
+  }
+  return moment(date).fromNow();
+};
+
+export {RenderPosition, createElement, render, remove, replace, getRandomArrayItem, getRandomIntegerNumber, getRandomDecimal, formatDate};
