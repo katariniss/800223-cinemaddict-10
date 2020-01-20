@@ -1,11 +1,13 @@
 import AbstractSmartComponent from './abstract-smart-component.js';
 import UserRating from './user-rating';
 import {getFilmDuration} from '../mocks/card';
+import {formatDate, encodeText} from '../utils.js';
 
 import moment from "moment";
 
 const createFilmPopupTemplate = (card, options) => {
   const {
+    id,
     name,
     description,
     poster,
@@ -19,18 +21,33 @@ const createFilmPopupTemplate = (card, options) => {
     writer,
     actor,
     ageRestriction,
-    commentDate
+    comments
   } = card;
 
-  const getReleaseDate = () => moment(releaseDate).format(`DD MMMM YYYY`);
+  const createCommentMarkup = () => {
+    return comments.map((comment) => {
 
-  const formatDate = (date) => {
-    const today = moment(new Date());
-    if (today.diff(date, `week`) >= 1) {
-      return moment(date).format(`YYYY/MM/DD hh:mm`);
-    }
-    return moment(date).fromNow();
+      return (
+        `<li class="film-details__comment">
+          <span class="film-details__comment-emoji">
+            <img src="${comment.emoji}" width="55" height="55" alt="emoji">
+          </span>
+          <div>
+            <p class="film-details__comment-text">${encodeText(comment.text)}</p>
+            <p class="film-details__comment-info">
+              <span class="film-details__comment-author">${comment.author}</span>
+              <span class="film-details__comment-day">${formatDate(comment.date)}</span>
+              <button class="film-details__comment-delete" data-film-id="${id}" data-comment-id="${comment.id}">Delete</button>
+            </p>
+          </div>
+        </li>`
+      );
+    })
+    .join(`\n`);
   };
+
+  const commentsTemplate = createCommentMarkup(comments);
+  const getReleaseDate = () => moment(releaseDate).format(`DD MMMM YYYY`);
 
   const {
     isUserRatingVisible
@@ -117,61 +134,10 @@ const createFilmPopupTemplate = (card, options) => {
 
           <div class="form-details__bottom-container">
           <section class="film-details__comments-wrap">
-              <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">4</span></h3>
+              <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
               <ul class="film-details__comments-list">
-              <li class="film-details__comment">
-                  <span class="film-details__comment-emoji">
-                  <img src="./images/emoji/smile.png" width="55" height="55" alt="emoji">
-                  </span>
-                  <div>
-                  <p class="film-details__comment-text">Interesting setting and a good cast</p>
-                  <p class="film-details__comment-info">
-                      <span class="film-details__comment-author">Tim Macoveev</span>
-                      <span class="film-details__comment-day">${formatDate(commentDate)}</span>
-                      <button class="film-details__comment-delete">Delete</button>
-                  </p>
-                  </div>
-              </li>
-              <li class="film-details__comment">
-                  <span class="film-details__comment-emoji">
-                  <img src="./images/emoji/sleeping.png" width="55" height="55" alt="emoji">
-                  </span>
-                  <div>
-                  <p class="film-details__comment-text">Booooooooooring</p>
-                  <p class="film-details__comment-info">
-                      <span class="film-details__comment-author">John Doe</span>
-                      <span class="film-details__comment-day">2 days ago</span>
-                      <button class="film-details__comment-delete">Delete</button>
-                  </p>
-                  </div>
-              </li>
-              <li class="film-details__comment">
-                  <span class="film-details__comment-emoji">
-                  <img src="./images/emoji/puke.png" width="55" height="55" alt="emoji">
-                  </span>
-                  <div>
-                  <p class="film-details__comment-text">Very very old. Meh</p>
-                  <p class="film-details__comment-info">
-                      <span class="film-details__comment-author">John Doe</span>
-                      <span class="film-details__comment-day">2 days ago</span>
-                      <button class="film-details__comment-delete">Delete</button>
-                  </p>
-                  </div>
-              </li>
-              <li class="film-details__comment">
-                  <span class="film-details__comment-emoji">
-                  <img src="./images/emoji/angry.png" width="55" height="55" alt="emoji">
-                  </span>
-                  <div>
-                  <p class="film-details__comment-text">Almost two hours? Seriously?</p>
-                  <p class="film-details__comment-info">
-                      <span class="film-details__comment-author">John Doe</span>
-                      <span class="film-details__comment-day">Today</span>
-                      <button class="film-details__comment-delete">Delete</button>
-                  </p>
-                  </div>
-              </li>
+                ${commentsTemplate}
               </ul>
 
               <div class="film-details__new-comment">
@@ -214,12 +180,15 @@ export default class FilmPopup extends AbstractSmartComponent {
   constructor(card) {
     super();
     this._card = card;
+    this._emojiSelected = null;
 
     this._isUserRatingVisible = card.isWatched;
     this.closeButtonClickHandler = () => {};
     this.watchlistButtonClickHandler = () => {};
     this.watchedButtonClickHandler = () => {};
     this.favoriteButtonClickHandler = () => {};
+    this.deleteButtonClickHandler = () => {};
+    this.addCommentHandler = () => {};
 
     this.recoveryListeners();
   }
@@ -241,6 +210,45 @@ export default class FilmPopup extends AbstractSmartComponent {
       .addEventListener(`click`, (e) => this.watchedButtonClickHandler(e));
     this.getElement().querySelector(`.film-details__control-label--favorite`)
       .addEventListener(`click`, (e) => this.favoriteButtonClickHandler(e));
+
+    const deleteButtons = this.getElement().querySelectorAll(`.film-details__comment-delete`);
+    [...deleteButtons].forEach((button) => {
+      button.addEventListener(`click`, (e) => {
+        const filmId = e.target.attributes[`data-film-id`].value;
+        const commentId = e.target.attributes[`data-comment-id`].value;
+
+        this.deleteButtonClickHandler(filmId, commentId);
+      });
+    });
+
+
+    this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`change`, (e) => {
+      if (e.target.classList.contains(`film-details__emoji-item`) && e.target.checked) {
+        const cloneImgElement = e.target.nextElementSibling.querySelector(`img`).cloneNode();
+        const targetElement = this.getElement().querySelector(`.film-details__add-emoji-label`);
+        targetElement.innerHTML = ``;
+        targetElement.appendChild(cloneImgElement);
+
+        const imgTargetElement = this.getElement().querySelector(`.film-details__emoji-label[for=${e.target.id}] img`);
+        this._emojiSelected = imgTargetElement.getAttribute(`src`);
+      }
+    });
+
+    const newCommentInput = this.getElement().querySelector(`.film-details__comment-input`);
+    newCommentInput.addEventListener(`keydown`, (e) => {
+      if (e.key === `Enter` && e.metaKey && newCommentInput.value && this._emojiSelected) {
+
+        const newCommentMessage = newCommentInput.value;
+        const newComment = {
+          id: String(new Date() + Math.random()),
+          emoji: this._emojiSelected,
+          text: newCommentMessage,
+          date: new Date()
+        };
+
+        this.addCommentHandler(newComment);
+      }
+    });
   }
 
   setCloseButtonClickHandler(handler) {
@@ -257,5 +265,13 @@ export default class FilmPopup extends AbstractSmartComponent {
 
   setFavoriteButtonClickHandler(handler) {
     this.favoriteButtonClickHandler = handler;
+  }
+
+  setDeleteButtonClickHandler(handler) {
+    this.deleteButtonClickHandler = handler;
+  }
+
+  setAddCommentHandler(handler) {
+    this.addCommentHandler = handler;
   }
 }

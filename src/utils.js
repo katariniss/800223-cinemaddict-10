@@ -1,3 +1,6 @@
+import moment from "moment";
+import he from "he";
+
 const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`
@@ -54,4 +57,23 @@ const getRandomDecimal = (min, max) => {
   return ((max - min) * Math.random()).toFixed(1);
 };
 
-export {RenderPosition, createElement, render, remove, replace, getRandomArrayItem, getRandomIntegerNumber, getRandomDecimal};
+
+const formatDate = (date) => {
+  const today = moment(new Date());
+  if (today.diff(date, `week`) >= 1) {
+    return moment(date).format(`YYYY/MM/DD hh:mm`);
+  }
+  return moment(date).fromNow();
+};
+
+const DESCRIPTION_MAX_LENGTH = 140;
+
+const cutText = (text) => {
+  return text.length > DESCRIPTION_MAX_LENGTH
+    ? `${text.substring(0, DESCRIPTION_MAX_LENGTH - 1)}...`
+    : text;
+};
+
+const encodeText = (text) => he.encode(text);
+
+export {RenderPosition, createElement, render, remove, replace, getRandomArrayItem, getRandomIntegerNumber, getRandomDecimal, formatDate, cutText, encodeText};
