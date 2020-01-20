@@ -50,6 +50,14 @@ export default class PageController {
     this.renderGeneralCards(filmsGeneralListElement);
   }
 
+  hide() {
+    this._container.hide();
+  }
+
+  show() {
+    this._container.show();
+  }
+
   render() {
     this._shownCards = [];
 
