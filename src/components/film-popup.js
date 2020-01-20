@@ -1,7 +1,7 @@
 import AbstractSmartComponent from './abstract-smart-component.js';
 import UserRating from './user-rating';
 import {getFilmDuration} from '../mocks/card';
-import {formatDate} from '../utils.js';
+import {formatDate, encodeText} from '../utils.js';
 
 import moment from "moment";
 
@@ -33,7 +33,7 @@ const createFilmPopupTemplate = (card, options) => {
             <img src="${comment.emoji}" width="55" height="55" alt="emoji">
           </span>
           <div>
-            <p class="film-details__comment-text">${comment.text}</p>
+            <p class="film-details__comment-text">${encodeText(comment.text)}</p>
             <p class="film-details__comment-info">
               <span class="film-details__comment-author">${comment.author}</span>
               <span class="film-details__comment-day">${formatDate(comment.date)}</span>

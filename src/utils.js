@@ -1,4 +1,5 @@
 import moment from "moment";
+import he from "he";
 
 const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
@@ -73,4 +74,6 @@ const cutText = (text) => {
     : text;
 };
 
-export {RenderPosition, createElement, render, remove, replace, getRandomArrayItem, getRandomIntegerNumber, getRandomDecimal, formatDate, cutText};
+const encodeText = (text) => he.encode(text);
+
+export {RenderPosition, createElement, render, remove, replace, getRandomArrayItem, getRandomIntegerNumber, getRandomDecimal, formatDate, cutText, encodeText};
