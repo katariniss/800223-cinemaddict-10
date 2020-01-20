@@ -1,5 +1,6 @@
 import AbstractComponent from './abstract-component.js';
 import {getFilmDuration} from '../mocks/card';
+import {cutText} from '../utils';
 
 const createFilmCardTemplate = ({
   name,
@@ -24,7 +25,7 @@ const createFilmCardTemplate = ({
         <span class="film-card__genre">${genres.join(`, `)}</span>
       </p>
       <img src="./images/posters/${poster}" alt="" class="film-card__poster">
-      <p class="film-card__description">${description}</p>
+      <p class="film-card__description">${cutText(description)}</p>
       <a class="film-card__comments">${commentsCount} comments</a>
       <form class="film-card__controls">
         <button type="button" class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${toWatch ? `film-card__controls-item--active` : ``}">Add to watchlist</button>

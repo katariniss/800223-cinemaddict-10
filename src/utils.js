@@ -65,4 +65,12 @@ const formatDate = (date) => {
   return moment(date).fromNow();
 };
 
-export {RenderPosition, createElement, render, remove, replace, getRandomArrayItem, getRandomIntegerNumber, getRandomDecimal, formatDate};
+const DESCRIPTION_MAX_LENGTH = 140;
+
+const cutText = (text) => {
+  return text.length > DESCRIPTION_MAX_LENGTH
+    ? `${text.substring(0, DESCRIPTION_MAX_LENGTH - 1)}...`
+    : text;
+};
+
+export {RenderPosition, createElement, render, remove, replace, getRandomArrayItem, getRandomIntegerNumber, getRandomDecimal, formatDate, cutText};
