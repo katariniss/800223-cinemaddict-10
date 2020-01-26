@@ -14,9 +14,21 @@ const moviesModel = new MoviesModel();
 moviesModel.setCards(films);
 
 const filtersController = new FiltersController(siteMainElement, moviesModel);
+const pageControllerComponent = new PageControllerComponent(siteMainElement, moviesModel);
+const statisticsComponent = new StatisticsComponent();
+
+filtersController.setNavigationItemClickHandler((evt) => {
+  if (evt.target.className.includes(`main-navigation__item--additional`)) {
+    pageControllerComponent.hide();
+    statisticsComponent.show();
+  } else {
+    pageControllerComponent.show();
+    statisticsComponent.hide();
+  }
+});
+
 filtersController.render();
 
-const pageControllerComponent = new PageControllerComponent(siteMainElement, moviesModel);
 pageControllerComponent.render();
 
-render(siteMainElement, new StatisticsComponent().getElement(), RenderPosition.BEFOREEND);
+render(siteMainElement, statisticsComponent.getElement(), RenderPosition.BEFOREEND);

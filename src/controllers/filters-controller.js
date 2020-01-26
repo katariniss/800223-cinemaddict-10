@@ -16,7 +16,14 @@ export default class FiltersController {
   render() {
     const siteMenuComponent = new FiltersComponent(generateFilters());
     render(this._container, siteMenuComponent.getElement(), RenderPosition.BEFOREEND);
+
     siteMenuComponent.setFilterChangeHandler(this._onFilterChange);
+
+    siteMenuComponent.setNavigationItemClickHandler(this.navigationItemClickHandler);
+  }
+
+  setNavigationItemClickHandler(handler) {
+    this.navigationItemClickHandler = handler;
   }
 
   _onFilterChange(filterType) {

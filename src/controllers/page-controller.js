@@ -7,6 +7,7 @@ import NoCardsComponent from '../components/no-cards.js';
 import MovieController from '../controllers/movie-controller.js';
 
 import {render, RenderPosition} from '../utils.js';
+import {hide, show} from '../utils';
 
 const FILM_CARD_COUNT_IN_EXTRA = 2;
 const SHOW_MORE_CARD_COUNT = 5;
@@ -51,18 +52,20 @@ export default class PageController {
   }
 
   hide() {
-    this._container.hide();
+    hide(this._container.querySelector(`.sort`));
+    hide(this._container.querySelector(`.films`));
   }
 
   show() {
-    this._container.show();
+    show(this._container.querySelector(`.sort`));
+    show(this._container.querySelector(`.films`));
   }
 
   render() {
     this._shownCards = [];
 
-    const filmsComponent = new FilmsListComponent();
-    render(this._container, filmsComponent, RenderPosition.BEFOREEND);
+    // const filmsComponent = new FilmsListComponent();
+    // render(this._container, filmsComponent, RenderPosition.BEFOREEND);
 
     const sortingComponent = new SortingComponent();
     render(this._container, sortingComponent.getElement(), RenderPosition.BEFOREEND);

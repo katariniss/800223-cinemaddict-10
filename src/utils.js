@@ -6,6 +6,8 @@ const RenderPosition = {
   BEFOREEND: `beforeend`
 };
 
+const HIDDEN_CLASS = `visually-hidden`;
+
 const createElement = (template) => {
   const newElement = document.createElement(`div`);
   newElement.innerHTML = template;
@@ -27,6 +29,14 @@ const render = (container, element, place) => {
 const remove = (component) => {
   component.getElement().remove();
   component.removeElement();
+};
+
+const show = (element) => {
+  element.classList.remove(HIDDEN_CLASS);
+};
+
+const hide = (element) => {
+  element.classList.add(HIDDEN_CLASS);
 };
 
 const replace = (newComponent, oldComponent) => {
@@ -76,4 +86,4 @@ const cutText = (text) => {
 
 const encodeText = (text) => he.encode(text);
 
-export {RenderPosition, createElement, render, remove, replace, getRandomArrayItem, getRandomIntegerNumber, getRandomDecimal, formatDate, cutText, encodeText};
+export {RenderPosition, createElement, render, remove, show, hide, replace, getRandomArrayItem, getRandomIntegerNumber, getRandomDecimal, formatDate, cutText, encodeText};
