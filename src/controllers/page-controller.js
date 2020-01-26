@@ -67,8 +67,9 @@ export default class PageController {
     // const filmsComponent = new FilmsListComponent();
     // render(this._container, filmsComponent, RenderPosition.BEFOREEND);
 
-    const sortingComponent = new SortingComponent();
-    render(this._container, sortingComponent.getElement(), RenderPosition.BEFOREEND);
+    const sortingComponent = new SortingComponent(this._sortBy);
+    this.sortingComponent = sortingComponent;
+    render(this._container, this.sortingComponent.getElement(), RenderPosition.BEFOREEND);
 
     const filmsListComponent = new FilmsListComponent();
     render(this._container, filmsListComponent.getElement(), RenderPosition.BEFOREEND);
@@ -115,6 +116,8 @@ export default class PageController {
       this._sortBy = sortType;
       this._shownCards = this.getSortedFilteredCards(this._sortBy).slice(0, this._shownCards.length);
       this.renderCards(filmsGeneralListElement, this._shownCards);
+
+      this.sortingComponent.rerender();
     });
   }
 
